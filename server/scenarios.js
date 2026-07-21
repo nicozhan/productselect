@@ -76,17 +76,17 @@ export const scenarios = [
   },
   {
     id: 'metro',
-    name: '地铁站通勤柜',
+    name: '奥林匹克公园(鸟巢站)',
     icon: '🚇',
-    tagline: '早高峰的 30 秒补给',
+    tagline: '观赛游园的 30 秒补给',
     deviceId: 'VM-MET-021',
-    location: '地铁 1 号线换乘通道',
-    city: '广州',
-    weather: { temp: 30, rain: 10, humidity: 70 },
+    location: '北京奥林匹克公园地铁站（8/15 号线，鸟巢与水立方之间）',
+    city: '北京',
+    weather: { temp: 25, rain: 5, humidity: 55 },
     event: '无',
     holiday: false,
-    demographics: { genderRatio: '通勤族为主', ageRange: '25-45 岁' },
-    inventoryNotes: '雨季前备好雨伞与湿巾。',
+    demographics: { genderRatio: '游客与通勤混合', ageRange: '全年龄段' },
+    inventoryNotes: '旅游旺季矿泉水与冷饮需求高，雨季备好湿巾。',
     salesData: `商品,昨日销量,周销量,单价,单位利润,库存,保质期天数
 矿泉水,70,490,2,0.5,250,365
 咖啡,45,310,12,5,40,2

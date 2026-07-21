@@ -1,0 +1,16 @@
+# 依赖（本项目零运行时依赖，仅用 Node 内置模块）
+node_modules/
+
+# 密钥与本地环境（绝不提交）
+.env
+.env.local
+*.key
+
+# 运行时产物
+data/uploads/
+*.log
+.DS_Store
+
+# 编辑器
+.vscode/
+.idea/

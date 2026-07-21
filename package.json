@@ -1,0 +1,15 @@
+{
+  "name": "ai-merchandising-agent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI 选品大脑 / AI Merchandising Agent —— 基于 InfiniSynapse 的无人零售智能选品运营 Agent（Vibe Coding 大赛参赛作品）",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {}
+}

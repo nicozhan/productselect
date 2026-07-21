@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 选品大脑 · AI Merchandising Agent</title>
+  <meta name="description" content="基于 InfiniSynapse 的无人零售智能选品运营 Agent：输入设备位置与销售数据，输出明天该卖什么、卖多少、为什么。" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">🧠</span>
+      <div>
+        <div class="brand-name">AI 选品大脑</div>
+        <div class="brand-sub">AI Merchandising Agent · 无人零售智能选品运营引擎</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span id="modeBadge" class="badge">…</span>
+      <span id="authArea" class="auth-area"></span>
+      <a class="ghost-btn" href="https://infinisynapse.cn/contest/vibe-coding" target="_blank" rel="noopener">Vibe Coding 大赛</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>明天该卖什么？<br/>让 AI 替你算。</h1>
+    <p class="hero-sub">
+      输入设备位置 + 历史销售 + 当下环境，AI 选品大脑覆盖 <b>12 个分析维度</b>，
+      给你一份可直接执行的补货与陈列决策——不只是报表，而是一句话答案：
+      <i>「明天卖什么、卖多少、放哪里、为什么。」</i>
+    </p>
+    <button class="primary-btn" onclick="document.getElementById('analyzer').scrollIntoView({behavior:'smooth'})">开始分析 →</button>
+    <div class="hero-tags">
+      <span>📊 历史销售</span><span>🌤 天气</span><span>📍 POI 场景识别</span>
+      <span>🛒 关联销售</span><span>🤖 AI Tomorrow 预测</span>
+    </div>
+    <div id="authBanner" class="auth-banner hidden">
+      🔑 <a href="/auth/infini/login">使用 InfiniSynapse 账号登录</a> 后分析——任务计入你自己的账号，可在 InfiniSynapse 后台查看你的选品历史。
+    </div>
+  </section>
+
+  <section id="analyzer" class="analyzer">
+    <div class="tabs">
+      <button class="tab active" data-tab="quick">⚡ 快速体验</button>
+      <button class="tab" data-tab="custom">🛠 自定义分析</button>
+    </div>
+
+    <!-- 快速体验 -->
+    <div id="tab-quick" class="tab-panel">
+      <p class="hint">挑一个预设场景，一键生成完整选品建议（评委/用户无需自备数据即可体验）。</p>
+      <div id="scenarioGrid" class="scenario-grid"></div>
+    </div>
+
+    <!-- 自定义 -->
+    <div id="tab-custom" class="tab-panel hidden">
+      <p class="hint">粘贴你自己的售货柜数据，AI 会基于真实输入给出建议。</p>
+      <div class="form-grid">
+        <label>设备ID<input id="f_deviceId" placeholder="VM-001" /></label>
+        <label>场景名称<input id="f_scenarioName" placeholder="如：写字楼大堂柜" /></label>
+        <label>位置<input id="f_location" placeholder="如：北京国贸写字楼" /></label>
+        <label>城市<input id="f_city" placeholder="北京" /></label>
+        <label>温度℃<input id="f_temp" type="number" placeholder="28" /></label>
+        <label>降雨mm<input id="f_rain" type="number" placeholder="0" /></label>
+        <label>湿度%<input id="f_humidity" type="number" placeholder="45" /></label>
+        <label>附近活动<input id="f_event" placeholder="如：周杰伦演唱会" /></label>
+        <label>性别比<input id="f_genderRatio" placeholder="女性 60%" /></label>
+        <label>年龄段<input id="f_ageRange" placeholder="20-35 岁" /></label>
+        <label class="span2 checkbox">
+          <input id="f_holiday" type="checkbox" /> 是否节假日
+        </label>
+        <label class="span2">库存/保质期备注<input id="f_inventoryNotes" placeholder="如：三明治临期需优先清" /></label>
+        <label class="span2">历史销售数据（CSV，可选）
+          <textarea id="f_salesData" rows="6" placeholder="商品,昨日销量,周销量,单价,单位利润,库存,保质期天数&#10;可口可乐,45,310,3,0.6,120,180"></textarea>
+        </label>
+      </div>
+      <button id="customRun" class="primary-btn">生成选品建议 →</button>
+    </div>
+  </section>
+
+  <!-- 进度 -->
+  <section id="progressSection" class="progress-section hidden">
+    <div class="progress-head">
+      <span class="spinner"></span>
+      <span>AI 正在分析 12 个维度…</span>
+    </div>
+    <pre id="progressLog" class="progress-log"></pre>
+  </section>
+
+  <!-- 结果 -->
+  <section id="resultSection" class="result-section hidden"></section>
+
+  <footer class="footer">
+    <div>🧠 AI 选品大脑 · 基于 <a href="https://infinisynapse.cn" target="_blank" rel="noopener">InfiniSynapse</a> 泛数据分析 Agent 构建 · Vibe Coding 大赛参赛作品</div>
+    <div class="footer-sub">后端经 InfiniSynapse Server API 发起长链路分析任务，调用日志可在平台后台查验。</div>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>

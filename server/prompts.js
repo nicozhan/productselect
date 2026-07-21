@@ -8,6 +8,25 @@ export function buildPrompt(inputs = {}) {
 
   const w = weather || {};
   const d = demographics || {};
+
+  // 时间锚点：让 AI 有「当前月份/季节」可据以推断天气与节令选品
+  const now = new Date();
+  const m = now.getMonth() + 1;
+  const season = (m >= 3 && m <= 5) ? '春季' : (m >= 6 && m <= 8) ? '夏季' : (m >= 9 && m <= 11) ? '秋季' : '冬季';
+  const place = city || location || '当地';
+
+  // 天气：用户通常不掌握，交由 AI 联网查询或按月份/城市推断
+  const hasWeather = w && (w.temp != null || w.rain != null || w.humidity != null);
+  const weatherLine = hasWeather
+    ? `温度 ${w.temp ?? '未知'}℃、降雨 ${w.rain ?? '未知'}、湿度 ${w.humidity ?? '未知'}%`
+    : `（用户未提供，请联网查询「${place}」当前天气，或依据当前为 ${m} 月（${season}）推断典型温度/降雨/湿度，并分析其对选品的影响）`;
+
+  // 用户画像：依场景类型由 AI 推断
+  const hasDemo = d && (d.genderRatio || d.ageRange);
+  const demoLine = hasDemo
+    ? `性别比 ${d.genderRatio || '未知'}、年龄段 ${d.ageRange || '未知'}`
+    : `（用户未提供，请依据场景类型「${scenarioName || '自定义场景'}」（写字楼/高校/工厂/商场/地铁/酒吧等）推断典型性别比与年龄段）`;
+
   const salesBlock = (salesData && salesData.trim())
     ? salesData.trim()
     : '(用户未提供历史销售明细，请基于场景类型与零售常识进行合理估算，并在报告中用「估算」字样明确标注)';
@@ -22,10 +41,11 @@ export function buildPrompt(inputs = {}) {
 - 设备ID：${deviceId || '未提供'}
 - 场景名称：${scenarioName || '自定义场景'}
 - 位置 / 城市：${location || '未知'}${city ? ' / ' + city : ''}
-- 当前天气：温度 ${w.temp ?? '未知'}℃、降雨 ${w.rain ?? '未知'}、湿度 ${w.humidity ?? '未知'}%
+- 当前时间：${m} 月（${season}）
+- 天气：${weatherLine}
 - 附近活动：${event || '无'}
 - 是否节假日：${holiday ? '是' : '否'}
-- 用户画像：性别比 ${d.genderRatio || '未知'}、年龄段 ${d.ageRange || '未知'}
+- 用户画像：${demoLine}
 - 库存 / 保质期备注：${inventoryNotes || '无'}
 
 # 历史销售数据
@@ -36,11 +56,11 @@ ${tomorrowBlock}
 # 分析要求（请尽量覆盖以下 12 个维度）
 1. 历史销售（销量 / GMV / 利润率 / 售罄率）
 2. 时间维度（小时 / 星期 / 月份）
-3. 天气维度（温度 / 降雨 / 湿度）
+3. 天气维度（温度 / 降雨 / 湿度）——**由你（AI）联网查询或推断**，用户通常不掌握这些环境数据
 4. 地理位置（POI：写字楼 / 学校 / 医院 / 地铁 / 商场 / 酒吧等）
 5. 周边活动（演唱会 / 赛事 / 展会）
 6. 节假日
-7. 用户画像（性别 / 年龄 / 消费力）
+7. 用户画像（性别 / 年龄 / 消费力）——**由你（AI）依据场景类型推断**，不要依赖用户填写
 8. 库存与保质期
 9. 商品关联销售（搭配购买 Market Basket Analysis）
 10. 竞争环境（周边便利店价格）

@@ -72,23 +72,22 @@
 
     <!-- 自定义 -->
     <div id="tab-custom" class="tab-panel hidden">
-      <p class="hint">粘贴你自己的售货柜数据，AI 会基于真实输入给出建议。</p>
+      <p class="hint">填写你的售货柜场景信息即可。<b>天气、人群画像、周边 POI 由 AI 自动分析</b>（联网查询当地气候 + 按场景类型推断），你只需提供运营方才知道的事实；有历史销售数据贴上会更精准。</p>
       <div class="form-grid">
-        <label>设备ID<input id="f_deviceId" placeholder="VM-001" /></label>
         <label>场景名称<input id="f_scenarioName" placeholder="如：写字楼大堂柜" /></label>
-        <label>位置<input id="f_location" placeholder="如：北京国贸写字楼" /></label>
-        <label>城市<input id="f_city" placeholder="北京" /></label>
-        <label>温度℃<input id="f_temp" type="number" placeholder="28" /></label>
-        <label>降雨mm<input id="f_rain" type="number" placeholder="0" /></label>
-        <label>湿度%<input id="f_humidity" type="number" placeholder="45" /></label>
-        <label>附近活动<input id="f_event" placeholder="如：周杰伦演唱会" /></label>
-        <label>性别比<input id="f_genderRatio" placeholder="女性 60%" /></label>
-        <label>年龄段<input id="f_ageRange" placeholder="20-35 岁" /></label>
-        <label class="span2 checkbox">
-          <input id="f_holiday" type="checkbox" /> 是否节假日
+        <label>所在位置<input id="f_location" placeholder="如：北京国贸写字楼大堂" /></label>
+        <label>城市<input id="f_city" placeholder="如：北京（帮助 AI 分析当地气候与人群）" /></label>
+        <label>设备ID<input id="f_deviceId" placeholder="VM-001（可选）" /></label>
+        <label class="span2">附近大型活动（可选）
+          <input id="f_event" placeholder="如：周杰伦演唱会 / 学校运动会（只有你知道才填）" />
         </label>
-        <label class="span2">库存/保质期备注<input id="f_inventoryNotes" placeholder="如：三明治临期需优先清" /></label>
-        <label class="span2">历史销售数据（CSV，可选）
+        <label class="span2 checkbox">
+          <input id="f_holiday" type="checkbox" /> 是否节假日 / 促销日
+        </label>
+        <label class="span2">库存与保质期备注（可选）
+          <input id="f_inventoryNotes" placeholder="如：三明治临期需优先清、矿泉水库存偏低" />
+        </label>
+        <label class="span2">历史销售数据（CSV，可选，有则更精准）
           <textarea id="f_salesData" rows="6" placeholder="商品,昨日销量,周销量,单价,单位利润,库存,保质期天数&#10;可口可乐,45,310,3,0.6,120,180"></textarea>
         </label>
       </div>

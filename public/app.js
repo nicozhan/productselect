@@ -128,9 +128,8 @@ function readForm() {
   return {
     deviceId: v('#f_deviceId'), scenarioName: v('#f_scenarioName'),
     location: v('#f_location'), city: v('#f_city'),
-    weather: { temp: num('#f_temp'), rain: num('#f_rain'), humidity: num('#f_humidity') },
+    // 天气与人群画像不再由用户填写，交由 AI 分析（见 prompts.js）
     event: v('#f_event'), holiday: $('#f_holiday').checked,
-    demographics: { genderRatio: v('#f_genderRatio'), ageRange: v('#f_ageRange') },
     inventoryNotes: v('#f_inventoryNotes'), salesData: v('#f_salesData')
   };
 }

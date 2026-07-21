@@ -128,13 +128,14 @@ function handleSsoLogin(req, res) {
     return res.end('<h2>SSO 未启用</h2><p>服务端未配置 INFINI_CLIENT_ID / INFINI_CLIENT_SECRET。请在 .env 中填入后在「设置 → 第三方接入」获取。</p><p><a href="/">返回</a></p>');
   }
   const state = sso.genState();
+  const returnUrl = sso.callbackUrl();
   sso.setStateCookie(res, state);
-  sso.createSession(sso.callbackUrl(), state).then(data => {
+  sso.createSession(returnUrl, state).then(data => {
     res.writeHead(302, { 'Location': data.entryUrl, 'Set-Cookie': [`oauth_state=${state}; Max-Age=600; Path=/; HttpOnly; SameSite=Lax`] });
     res.end();
   }).catch(e => {
     res.writeHead(502, { 'Content-Type': 'text/html; charset=utf-8' });
-    res.end(`<h2>创建登录会话失败</h2><p>${String(e.message || e)}</p><p><a href="/">返回</a></p>`);
+    res.end(`<h2>创建登录会话失败</h2><p>${String(e.message || e)}</p><p>本次发起的 returnUrl：<br><code>${returnUrl}</code></p><p>请确认 InfiniSynapse「第三方接入」白名单里已加入该 returnUrl 的<strong>域名部分</strong>（不含 https:// 与路径）。</p><p><a href="/">返回</a></p>`);
   });
 }
 

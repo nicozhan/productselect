@@ -1,13 +1,14 @@
 :root {
-  --bg: #0b0f1a;
-  --bg-soft: #121829;
-  --card: #161d31;
-  --card-2: #1b2440;
-  --border: #26304d;
+  --bg: #0a0e1a;
+  --bg-soft: #111728;
+  --card: #141b30;
+  --card-2: #1a2342;
+  --border: #25304f;
   --text: #e8ecf6;
   --muted: #93a0bd;
-  --accent: #6c8cff;
-  --accent-2: #34e0d0;
+  --accent: #4a63ff;         /* VendSolution 品牌蓝（提亮用于暗色界面） */
+  --accent-strong: #1d30c7; /* VendSolution 品牌原蓝 */
+  --accent-2: #ff6a00;      /* VendSolution 品牌橙 */
   --good: #36d399;
   --warn: #fbbd23;
   --bad: #f87272;
@@ -17,7 +18,7 @@
 html, body { margin: 0; padding: 0; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-  background: radial-gradient(1200px 600px at 70% -10%, #1a2342 0%, transparent 60%), var(--bg);
+  background: radial-gradient(1200px 600px at 70% -10%, #1d2a5e 0%, transparent 60%), var(--bg);
   background-color: var(--bg);
   color: var(--text);
   line-height: 1.6;
@@ -34,7 +35,7 @@ a:hover { text-decoration: underline; }
   position: sticky; top: 0; z-index: 10;
 }
 .brand { display: flex; align-items: center; gap: 12px; }
-.logo { font-size: 30px; }
+.brand-logo { height: 22px; width: auto; display: block; }
 .brand-name { font-weight: 800; font-size: 18px; letter-spacing: .5px; }
 .brand-sub { font-size: 12px; color: var(--muted); }
 .topbar-right { display: flex; align-items: center; gap: 12px; }
@@ -54,9 +55,11 @@ a:hover { text-decoration: underline; }
 .hero { max-width: 920px; margin: 0 auto; padding: 72px 24px 40px; text-align: center; }
 .hero h1 { font-size: 46px; line-height: 1.15; margin: 0 0 18px; font-weight: 850;
   background: linear-gradient(90deg, #fff, var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.hero-sub { color: var(--muted); font-size: 17px; max-width: 720px; margin: 0 auto 28px; }
+.hero-sub { color: var(--muted); font-size: 17px; max-width: 720px; margin: 0 auto 14px; }
 .hero-sub b { color: var(--text); }
 .hero-sub i { color: var(--accent-2); }
+.hero-brand { color: var(--muted); font-size: 13.5px; max-width: 720px; margin: 0 auto 28px; }
+.hero-brand b { color: var(--accent-2); }
 .primary-btn {
   font-size: 16px; font-weight: 700; color: #06121f; cursor: pointer;
   padding: 13px 30px; border: none; border-radius: 12px;
@@ -126,8 +129,9 @@ a:hover { text-decoration: underline; }
 .card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 22px; box-shadow: var(--shadow); }
 .card h2 { margin: 0 0 14px; font-size: 20px; display: flex; align-items: center; gap: 8px; }
 .decision {
-  background: linear-gradient(135deg, var(--card-2), #10233a);
-  border-color: rgba(52,224,208,.35); font-size: 19px; line-height: 1.7; font-weight: 600;
+  background: linear-gradient(135deg, var(--card-2), #161433);
+  border-color: rgba(255,106,0,.4); box-shadow: 0 10px 40px rgba(255,106,0,.12);
+  font-size: 19px; line-height: 1.7; font-weight: 600;
 }
 .decision .label { display:block; font-size: 12px; color: var(--accent-2); letter-spacing: 2px; margin-bottom: 8px; font-weight: 700; }
 
@@ -189,6 +193,8 @@ a:hover { text-decoration: underline; }
 
 /* Footer */
 .footer { text-align: center; padding: 30px 24px 50px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); }
+.footer-brand { display: flex; justify-content: center; margin-bottom: 14px; }
+.footer-logo { height: 20px; width: auto; opacity: .92; }
 .footer-sub { margin-top: 6px; font-size: 12px; opacity: .8; }
 
 @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
@@ -218,7 +224,7 @@ a:hover { text-decoration: underline; }
 .list-sub { font-size: 12.5px; color: var(--muted); padding: 2px 0 8px 4px; grid-column: 1 / -1; }
 
 /* 引用块（报告中一句话决策等） */
-.report blockquote, blockquote { border-left: 3px solid var(--accent-2); background: rgba(52,224,208,.06);
+.report blockquote, blockquote { border-left: 3px solid var(--accent-2); background: rgba(255,106,0,.06);
   margin: 10px 0; padding: 10px 14px; border-radius: 8px; color: var(--text); }
 
 /* 数据来源标注 */

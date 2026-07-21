@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI 选品大脑 · AI Merchandising Agent</title>
-  <meta name="description" content="基于 InfiniSynapse 的无人零售智能选品运营 Agent：输入设备位置与销售数据，输出明天该卖什么、卖多少、为什么。" />
+  <title>AI 选品大脑 · VendSolution 无人零售选品引擎</title>
+  <meta name="description" content="由 VendSolution 无人零售运营智能平台（AIoT + SaaS）赋能的 AI 选品大脑：输入设备位置与销售数据，输出明天该卖什么、卖多少、为什么。" />
+  <link rel="icon" href="/assets/vs-favicon.jpg" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <span class="logo">🧠</span>
+      <img src="/assets/vendsolution-horizontal-white.svg" alt="VendSolution" class="brand-logo" />
       <div>
         <div class="brand-name">AI 选品大脑</div>
-        <div class="brand-sub">AI Merchandising Agent · 无人零售智能选品运营引擎</div>
+        <div class="brand-sub">VendSolution 无人零售智能选品引擎</div>
       </div>
     </div>
     <div class="topbar-right">
@@ -30,6 +31,7 @@
       给你一份可直接执行的补货与陈列决策——不只是报表，而是一句话答案：
       <i>「明天卖什么、卖多少、放哪里、为什么。」</i>
     </p>
+    <p class="hero-brand">由 <b>VendSolution</b> 无人零售运营智能平台（AIoT + SaaS）赋能 · 已服务 PepsiCo、7-Eleven 等全球客户</p>
     <button class="primary-btn" onclick="document.getElementById('analyzer').scrollIntoView({behavior:'smooth'})">开始分析 →</button>
     <div class="hero-tags">
       <span>📊 历史销售</span><span>🌤 天气</span><span>📍 POI 场景识别</span>
@@ -91,8 +93,11 @@
   <section id="resultSection" class="result-section hidden"></section>
 
   <footer class="footer">
-    <div>🧠 AI 选品大脑 · 基于 <a href="https://infinisynapse.cn" target="_blank" rel="noopener">InfiniSynapse</a> 泛数据分析 Agent 构建 · Vibe Coding 大赛参赛作品</div>
-    <div class="footer-sub">后端经 InfiniSynapse Server API 发起长链路分析任务，调用日志可在平台后台查验。</div>
+    <div class="footer-brand">
+      <img src="/assets/vendsolution-horizontal-white.svg" alt="VendSolution" class="footer-logo" />
+    </div>
+    <div>AI 选品大脑 · 由 <a href="https://vendsolution.com" target="_blank" rel="noopener">VendSolution</a> 无人零售运营智能平台（AIoT + SaaS）赋能 · 基于 <a href="https://infinisynapse.cn" target="_blank" rel="noopener">InfiniSynapse</a> 构建 · Vibe Coding 大赛参赛作品</div>
+    <div class="footer-sub">选品引擎调用 VendSolution 无人零售数据与 InfiniSynapse Server API 发起长链路分析，调用日志可在平台后台查验。</div>
   </footer>
 
   <script src="/app.js"></script>

@@ -173,17 +173,48 @@ a:hover { text-decoration: underline; }
 .list-row .up { color: var(--good); } .list-row .down { color: var(--bad); }
 
 /* Report */
-.report { font-size: 14.5px; }
-.report h1, .report h2, .report h3 { color: var(--text); margin: 18px 0 10px; }
-.report h2 { font-size: 18px; border-left: 3px solid var(--accent); padding-left: 10px; }
-.report p { color: #cdd6ea; }
-.report ul, .report ol { color: #cdd6ea; padding-left: 22px; }
-.report table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
-.report th, .report td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }
-.report th { background: var(--card-2); }
-.report code { background: var(--bg-soft); padding: 1px 6px; border-radius: 5px; font-size: 12.5px; }
-.report pre { background: #070b14; border: 1px solid var(--border); border-radius: 10px; padding: 14px; overflow: auto; }
-.report pre code { background: none; padding: 0; }
+/* ===== Markdown 报告排版（marked 输出） ===== */
+.report { font-size: 14.5px; line-height: 1.75; color: #cdd6ea; }
+.report > :first-child { margin-top: 0; }
+.report > :last-child { margin-bottom: 0; }
+.report h1, .report h2, .report h3, .report h4 { color: var(--text); font-weight: 700; line-height: 1.35; }
+.report h1 { font-size: 22px; margin: 22px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.report h2 { font-size: 18px; margin: 20px 0 10px; border-left: 3px solid var(--accent); padding-left: 10px; }
+.report h3 { font-size: 15.5px; margin: 16px 0 8px; color: #dbe3f5; }
+.report h4 { font-size: 14px; margin: 14px 0 6px; color: var(--muted); }
+.report p { margin: 9px 0; color: #cdd6ea; }
+.report a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(74,99,255,.4); }
+.report a:hover { color: #fff; border-bottom-color: var(--accent); }
+.report strong { color: #fff; font-weight: 700; }
+.report em { color: #e7c9a8; }
+.report ul, .report ol { margin: 9px 0; padding-left: 24px; color: #cdd6ea; }
+.report li { margin: 4px 0; }
+.report li::marker { color: var(--accent); }
+.report hr { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+
+/* 表格：品牌色表头 + 斑马纹 */
+.report table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; overflow: hidden; border-radius: 8px; }
+.report th, .report td { border: 1px solid var(--border); padding: 8px 11px; text-align: left; vertical-align: top; }
+.report thead th { background: linear-gradient(135deg, #1d30c7, #4a63ff); color: #fff; font-weight: 600; border-color: #2a3a8f; }
+.report tbody tr:nth-child(even) { background: rgba(255,255,255,.025); }
+.report tbody tr:hover { background: rgba(74,99,255,.08); }
+.report td code, .report th code { background: rgba(0,0,0,.3); }
+
+/* 代码块 */
+.report code { background: var(--bg-soft); padding: 1.5px 6px; border-radius: 5px; font-size: 12.5px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: #ffd9b0; }
+.report pre { background: #070b14; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; overflow: auto; margin: 10px 0; }
+.report pre code { background: none; padding: 0; color: #d6e0f5; }
+
+/* 引用块：品牌橙 */
+.report blockquote, blockquote { border-left: 3px solid var(--accent-2); background: rgba(255,106,0,.07);
+  margin: 10px 0; padding: 10px 14px; border-radius: 0 8px 8px 0; color: #f0d9c4; }
+.report blockquote p { margin: 4px 0; color: #f0d9c4; }
+
+/* 图片 */
+.report img { max-width: 100%; border-radius: 8px; margin: 8px 0; }
+
+/* 库未加载时的纯文本兜底 */
+.md-fallback { white-space: pre-wrap; word-break: break-word; color: #cdd6ea; font-size: 14px; }
 
 /* Actions */
 .actions { display: flex; gap: 12px; flex-wrap: wrap; }

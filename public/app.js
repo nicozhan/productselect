@@ -141,7 +141,7 @@ function renderResults(result) {
 
   // 一句话决策
   const decision = p.decision || firstSentence(result.reportText) || '分析完成。';
-  sec.appendChild(card(`<span class="label">AI 一句话决策</span>${esc(decision)}`, 'decision'));
+  sec.appendChild(card(`<span class="label">AI 一句话决策</span>${md1(decision)}`, 'decision'));
 
   // 场景识别
   if (p.scene && (p.scene.markdown || (p.scene.addReduce && p.scene.addReduce.length))) {
@@ -150,7 +150,7 @@ function renderResults(result) {
     if (s.addReduce && s.addReduce.length) {
       html += '<div class="addreduce">' + s.addReduce.map(a => {
         const cls = /增加|新增|大幅/.test(a.action) ? 'up' : (/减少|降低|缩减/.test(a.action) ? 'down' : 'flat');
-        return `<div class="ar-row"><span class="ar-act ${cls}">${esc(a.action)}</span><span class="ar-cat">${esc(a.category)}</span><span class="ar-reason">${esc(a.reason)}</span></div>`;
+        return `<div class="ar-row"><span class="ar-act ${cls}">${md1(a.action)}</span><span class="ar-cat">${md1(a.category)}</span><span class="ar-reason">${md1(a.reason)}</span></div>`;
       }).join('') + '</div>';
     }
     if (s.markdown) html += `<div class="report scene-md">${renderMarkdown(s.markdown)}</div>`;
@@ -162,12 +162,12 @@ function renderResults(result) {
     const cards = p.scores.map(sc => {
       const c = scoreColor(sc.total);
       const subs = (sc.subs || []).map(x =>
-        `<div class="sub-row"><span>${esc(x.label)}</span><span class="bar"><i style="width:${Math.min(100, x.value)}%"></i></span><span>${x.value}</span></div>`).join('');
+        `<div class="sub-row"><span>${md1(x.label)}</span><span class="bar"><i style="width:${Math.min(100, x.value)}%"></i></span><span>${x.value}</span></div>`).join('');
       const sugCls = /增加/.test(sc.suggestion) ? 'up' : (/减少|不补/.test(sc.suggestion) ? 'down' : 'flat');
       return `<div class="score-card">
         <div class="score-head">
           <div class="ring" style="--p:${sc.total};--c:${c}"><span class="num">${sc.total}</span></div>
-          <div class="score-meta"><div class="pname">${esc(sc.product)}</div><div class="sug ${sugCls}">${esc(sc.suggestion || '')}</div></div>
+          <div class="score-meta"><div class="pname">${esc(sc.product)}</div><div class="sug ${sugCls}">${md1(sc.suggestion || '')}</div></div>
         </div>
         <div class="subs">${subs}</div>
       </div>`;
@@ -178,11 +178,11 @@ function renderResults(result) {
   // 关联销售
   if (p.basket && p.basket.length) {
     const rows = p.basket.map(b => `
-      <div class="list-row"><span class="tag">${esc(b.pair || '')}</span>
+      <div class="list-row"><span class="tag">${md1(b.pair || '')}</span>
       <span>关联强度 ${b.strength}%</span>
       <span class="up">连带 +${b.uplift}%</span>
-      <span style="color:var(--muted)">${esc(b.crossSell || '—')}</span></div>
-      ${b.logic ? `<div class="list-sub">${esc(b.logic)}</div>` : ''}`).join('');
+      <span style="color:var(--muted)">${md1(b.crossSell || '—')}</span></div>
+      ${b.logic ? `<div class="list-sub">${md1(b.logic)}</div>` : ''}`).join('');
     sec.appendChild(card(`<h2>🛒 商品关联销售（Market Basket）</h2>${rows}`, ''));
   }
 
@@ -190,11 +190,11 @@ function renderResults(result) {
   if (p.tomorrow && p.tomorrow.length) {
     const rows = p.tomorrow.map(t => {
       const cls = /不补|减少|收缩|下架|降低/.test(t.action) ? 'down' : 'up';
-      return `<div class="list-row"><span class="${cls}">${cls === 'down' ? '⛔' : '✅'} ${esc(t.action || '')} <b>${esc(t.product)}</b></span>
-        ${t.qty ? `<span>${esc(t.qty)}</span>` : ''}
+      return `<div class="list-row"><span class="${cls}">${cls === 'down' ? '⛔' : '✅'} ${md1(t.action || '')} <b>${md1(t.product)}</b></span>
+        ${t.qty ? `<span>${md1(t.qty)}</span>` : ''}
         ${t.predict ? `<span>明日预测 ${t.predict} 件</span>` : ''}
-        ${t.vsYesterday ? `<span class="${cls}">${esc(t.vsYesterday)}</span>` : ''}</div>
-        ${t.reason ? `<div class="list-sub">${esc(t.reason)}</div>` : ''}`.trim();
+        ${t.vsYesterday ? `<span class="${cls}">${md1(t.vsYesterday)}</span>` : ''}</div>
+        ${t.reason ? `<div class="list-sub">${md1(t.reason)}</div>` : ''}`.trim();
     }).join('');
     sec.appendChild(card(`<h2>🤖 AI Tomorrow · 明日选品建议</h2>${rows}`, ''));
   }
@@ -229,44 +229,27 @@ function scoreColor(t) { return t >= 85 ? 'var(--good)' : t >= 70 ? 'var(--accen
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
 function firstSentence(md) { const m = (md || '').replace(/^#.*$/gm, '').match(/[^\n。！？]{6,}[。！？]/); return m ? m[0] : ''; }
 
+// 用 marked 渲染完整 Markdown（带 DOMPurify 安全过滤）；库未加载时降级为纯文本转义
 function renderMarkdown(md) {
   if (!md) return '';
-  // 隐藏机器可读 JSON 块（已用卡片展示）
-  md = md.replace(/```json[\s\S]*?```/g, '').replace(/```([\s\S]*?)```/g, (m) => `<pre><code>${esc(m.replace(/```/g, ''))}</code></pre>`);
-  const lines = md.split('\n');
-  let html = '', i = 0, inList = null;
-  const close = () => { if (inList) { html += `</${inList}>`; inList = null; } };
-  while (i < lines.length) {
-    const line = lines[i];
-    if (/^###\s+/.test(line)) { close(); html += `<h3>${inline(line.replace(/^###\s+/, ''))}</h3>`; i++; continue; }
-    if (/^##\s+/.test(line)) { close(); html += `<h2>${inline(line.replace(/^##\s+/, ''))}</h2>`; i++; continue; }
-    if (/^#\s+/.test(line)) { close(); html += `<h1>${inline(line.replace(/^#\s+/, ''))}</h1>`; i++; continue; }
-    if (/^\s*\|.*\|\s*$/.test(line)) {
-      close();
-      const rows = [];
-      while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i])) { rows.push(lines[i]); i++; }
-      html += renderTable(rows); continue;
-    }
-    if (/^>\s?/.test(line)) { close(); html += `<blockquote>${inline(line.replace(/^>\s?/, ''))}</blockquote>`; i++; continue; }
-    if (/^[-*]\s+/.test(line)) { if (inList !== 'ul') { close(); html += '<ul>'; inList = 'ul'; } html += `<li>${inline(line.replace(/^[-*]\s+/, ''))}</li>`; i++; continue; }
-    if (/^\d+\.\s+/.test(line)) { if (inList !== 'ol') { close(); html += '<ol>'; inList = 'ol'; } html += `<li>${inline(line.replace(/^\d+\.\s+/, ''))}</li>`; i++; continue; }
-    if (line.trim() === '') { close(); i++; continue; }
-    close(); html += `<p>${inline(line)}</p>`; i++;
+  // 隐藏机器可读 JSON 块（已用结构化卡片展示），避免大段原始 JSON 挤占版面
+  const src = String(md).replace(/```json[\s\S]*?```/g, '');
+  if (typeof marked !== 'undefined') {
+    marked.setOptions({ gfm: true, breaks: true });
+    let html = marked.parse(src);
+    if (typeof DOMPurify !== 'undefined') html = DOMPurify.sanitize(html);
+    return html;
   }
-  close();
-  return html;
+  return '<div class="md-fallback">' + esc(src) + '</div>';
 }
-function inline(s) {
-  s = esc(s);
-  s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
-  s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-  s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-  return s;
-}
-function renderTable(rows) {
-  const cells = (r) => r.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map(c => c.trim());
-  const head = cells(rows[0]);
-  let h = '<table><thead><tr>' + head.map(c => `<th>${inline(c)}</th>`).join('') + '</tr></thead><tbody>';
-  for (let k = 2; k < rows.length; k++) h += '<tr>' + cells(rows[k]).map(x => `<td>${inline(x)}</td>`).join('') + '</tr>';
-  return h + '</tbody></table>';
+// 行内 Markdown（用于一句话决策、建议、理由等短文本，避免 **加粗** 显示成字面星号）
+function md1(md) {
+  if (!md) return '';
+  const src = String(md).replace(/```json[\s\S]*?```/g, '');
+  if (typeof marked !== 'undefined') {
+    let html = marked.parseInline(src);
+    if (typeof DOMPurify !== 'undefined') html = DOMPurify.sanitize(html);
+    return html;
+  }
+  return esc(src);
 }

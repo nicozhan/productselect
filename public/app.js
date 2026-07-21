@@ -1,6 +1,6 @@
 // public/app.js
 const $ = (s) => document.querySelector(s);
-const state = { scenarios: [], running: false, timer: null };
+const state = { scenarios: [], realScenarios: [], cat: 'mock', running: false, timer: null };
 
 document.addEventListener('DOMContentLoaded', init);
 
@@ -19,6 +19,20 @@ async function init() {
     state.scenarios = data.scenarios || [];
     renderScenarios();
   } catch (e) { console.error(e); }
+
+  // 已有数据场景
+  try {
+    const data = await fetch('/api/real-scenarios').then(r => r.json());
+    state.realScenarios = data.scenarios || [];
+  } catch (e) { console.error(e); }
+
+  // 分类切换（模拟数据 / 已有数据）
+  document.querySelectorAll('.seg-btn').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.seg-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    state.cat = b.dataset.cat;
+    renderScenarios();
+  }));
 
   // Tab
   document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
@@ -63,16 +77,24 @@ function renderAuth(me) {
 function renderScenarios() {
   const grid = $('#scenarioGrid');
   grid.innerHTML = '';
-  state.scenarios.forEach(s => {
+  const list = state.cat === 'real' ? state.realScenarios : state.scenarios;
+  const isReal = state.cat === 'real';
+  if (isReal && (!list || !list.length)) {
+    grid.innerHTML = '<div class="hint">已有数据场景加载中或暂不可用，请稍后重试或切换到「模拟数据」。</div>';
+    return;
+  }
+  list.forEach(s => {
     const card = document.createElement('div');
-    card.className = 'scenario-card';
+    card.className = 'scenario-card' + (isReal ? ' real' : '');
+    const badge = isReal ? `<div class="dtype">📁 已有数据</div>` : '';
     card.innerHTML = `
+      ${badge}
       <div class="icon">${s.icon || '📦'}</div>
       <div class="name">${esc(s.name)}</div>
       <div class="tag">${esc(s.tagline || '')}</div>
       <div class="loc">📍 ${esc(s.location || '')}</div>
-      <div class="run">⚡ 一键生成选品建议 →</div>`;
-    card.addEventListener('click', () => runAnalyze(s));
+      <div class="run">${isReal ? '⚡ 加载固定数据，秒出结果 →' : '⚡ 一键生成选品建议 →'}</div>`;
+    card.addEventListener('click', () => isReal ? runRealAnalysis(s) : runAnalyze(s));
     grid.appendChild(card);
   });
 }
@@ -212,6 +234,17 @@ function renderResults(result) {
     <button onclick="navigator.clipboard.writeText(location.href).then(()=>this.textContent='✅ 链接已复制')">🔗 复制分享链接</button>
     <button onclick="document.getElementById('analyzer').scrollIntoView({behavior:'smooth'})">↺ 重新分析</button>
     <span class="src">数据来源：InfiniSynapse · 任务 ${esc(result.taskId || '—')} · ${result.mock ? '演示模式' : '真实分析'}</span>`;
+  if (result.real) {
+    const meta = result.meta || {};
+    const src = meta.source ? `${meta.source}${meta.transactions ? '（' + meta.transactions + ' 条真实交易）' : ''}` : '固定开源数据集';
+    const how = result.mock
+      ? '基于固定开源数据集的确定性分析（演示）'
+      : '由 InfiniSynapse 预生成';
+    const note = document.createElement('div');
+    note.className = 'real-credit';
+    note.innerHTML = `📁 本结果为<strong>已有数据模式</strong>：${how}并缓存，数据源 <code>${esc(src)}</code>。数据固定、结论可复现，约 10 秒即出。`;
+    sec.appendChild(note);
+  }
   if (result.ranAsUser) {
     const note = document.createElement('div');
     note.className = 'user-credit';
@@ -221,6 +254,62 @@ function renderResults(result) {
   sec.appendChild(act);
 
   window.scrollTo({ top: sec.offsetTop - 80, behavior: 'smooth' });
+}
+
+// 「已有数据」模式：数据为固定开源数据集，结论已预生成并缓存。
+// 点击后展示约 10 秒加载动画（数据固定、结论可复现），体验快且稳定。
+async function runRealAnalysis(sc) {
+  if (state.running) return;
+  state.running = true;
+  $('#resultSection').classList.add('hidden');
+  showProgress('📁 已有数据 · 加载固定数据集…');
+  const bar = $('#progressBar');
+  const meta = sc.meta || {};
+  const srcName = (meta.source || 'vending_machine_sales.csv');
+  const tx = meta.transactions ? `（${meta.transactions} 条真实交易）` : '';
+  const steps = [
+    `📁 已锁定固定数据集：${srcName}${tx}`,
+    `🔍 正在按「${sc.location}」场景匹配商品矩阵…`,
+    '🤖 调取已生成的 AI 选品结论（数据固定，结论可复现）…',
+    '✅ 即将呈现'
+  ];
+  // 同时拉取预生成结果（缓存命中时瞬时返回）
+  const fetchP = fetch('/api/real-analysis/' + encodeURIComponent(sc.id))
+    .then(r => r.json()).catch(() => null);
+  await animateProgress(bar, steps, 10000);
+  const data = await fetchP;
+  $('#progressSection').classList.add('hidden');
+  if (data && data.result) {
+    renderResults(data.result);
+  } else {
+    $('#progressLog').textContent += '\n❌ 加载失败，请重试或切换到「模拟数据」。';
+    state.running = false;
+  }
+  state.running = false;
+}
+
+function showProgress(title) {
+  $('#progressTitle').textContent = title || 'AI 正在分析…';
+  $('#progressLog').textContent = '';
+  $('#progressBar').style.width = '0%';
+  $('#progressSection').classList.remove('hidden');
+  window.scrollTo({ top: document.getElementById('progressSection').offsetTop - 80, behavior: 'smooth' });
+}
+
+function animateProgress(bar, steps, duration) {
+  return new Promise(resolve => {
+    const start = Date.now();
+    const log = $('#progressLog');
+    let si = 0;
+    log.textContent = steps[0] + '\n';
+    const tick = setInterval(() => {
+      const p = Math.min(1, (Date.now() - start) / duration);
+      bar.style.width = (p * 100).toFixed(1) + '%';
+      const idx = Math.min(steps.length - 1, Math.floor(p * steps.length));
+      if (idx !== si) { si = idx; log.textContent += steps[idx] + '\n'; log.scrollTop = log.scrollHeight; }
+      if (p >= 1) { clearInterval(tick); resolve(); }
+    }, 100);
+  });
 }
 
 /* ---------- 工具 ---------- */

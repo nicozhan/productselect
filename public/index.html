@@ -51,6 +51,10 @@
     <!-- 快速体验 -->
     <div id="tab-quick" class="tab-panel">
       <p class="hint">挑一个预设场景，一键生成完整选品建议（评委/用户无需自备数据即可体验）。</p>
+      <div class="seg">
+        <button class="seg-btn active" data-cat="mock">🎲 模拟数据</button>
+        <button class="seg-btn" data-cat="real">📁 已有数据</button>
+      </div>
       <div id="scenarioGrid" class="scenario-grid"></div>
     </div>
 
@@ -84,8 +88,9 @@
   <section id="progressSection" class="progress-section hidden">
     <div class="progress-head">
       <span class="spinner"></span>
-      <span>AI 正在分析 12 个维度…</span>
+      <span id="progressTitle">AI 正在分析 12 个维度…</span>
     </div>
+    <div class="progress-bar"><i id="progressBar"></i></div>
     <pre id="progressLog" class="progress-log"></pre>
   </section>
 

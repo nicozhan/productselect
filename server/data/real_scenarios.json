@@ -1,0 +1,189 @@
+{
+  "scenarios": [
+    {
+      "id": "office-real",
+      "dataType": "real",
+      "icon": "🏢",
+      "name": "国贸写字楼大堂柜",
+      "tagline": "CBD 上班族的早八续命站",
+      "deviceId": "VM-REAL-OFF",
+      "location": "北京国贸三期写字楼大堂",
+      "city": "北京",
+      "weather": {
+        "temp": 28,
+        "rain": 0,
+        "humidity": 45
+      },
+      "event": "无",
+      "holiday": false,
+      "demographics": {
+        "genderRatio": "女性 58%",
+        "ageRange": "25-40 岁"
+      },
+      "inventoryNotes": "三明治/酸奶当日库存有限，临期需优先清。",
+      "salesData": "商品,昨日销量,周销量,单价,单位利润,库存,保质期天数\nCoca Cola - Zero Sugar,2,13,1.49,0.5,20,180\nMonster Energy Original,1,10,3.01,1.1,15,180\nPoland Springs Water,1,9,1.54,0.5,14,365\nKitKat - Crisp Wafers,1,5,2.16,0.8,10,120\nSunChips Multigrain - Harvest Cheddar,1,5,1.5,0.5,10,120\nCheezIt - Original,1,4,1.56,0.5,10,120\nWonderful Pistachios - Variety,1,4,2.0,0.7,10,120\nGoldfish Baked - Cheddar,1,3,1.31,0.5,10,120\nOreo Mini,1,3,1.66,0.6,10,120\nSnapple Tea - Raspberry,1,3,2.52,0.9,10,180\nStarbucks Doubleshot Energy - Mocha,1,3,3.54,1.2,10,180\nCheetos - Fleming Hot Crunchy,1,2,1.61,0.6,10,120",
+      "meta": {
+        "source": "vending_machine_sales.csv",
+        "transactions": 9617,
+        "productsUsed": 12,
+        "year": "2022",
+        "sampleProducts": [
+          "Coca Cola - Zero Sugar",
+          "Monster Energy Original",
+          "Poland Springs Water",
+          "KitKat - Crisp Wafers",
+          "SunChips Multigrain - Harvest Cheddar",
+          "CheezIt - Original"
+        ]
+      }
+    },
+    {
+      "id": "campus-real",
+      "dataType": "real",
+      "icon": "🎓",
+      "name": "浙江大学紫金港校区",
+      "tagline": "求是园里的深夜补给站",
+      "deviceId": "VM-REAL-CAM",
+      "location": "浙江大学紫金港校区宿舍区及周边",
+      "city": "杭州",
+      "weather": {
+        "temp": 27,
+        "rain": 0,
+        "humidity": 65
+      },
+      "event": "无",
+      "holiday": false,
+      "demographics": {
+        "genderRatio": "男女各半",
+        "ageRange": "18-24 岁"
+      },
+      "inventoryNotes": "期末/假期客流波动大，泡面与零食周转快，注意临期清货。",
+      "salesData": "商品,昨日销量,周销量,单价,单位利润,库存,保质期天数\nCoca Cola - Zero Sugar,2,13,1.49,0.5,20,180\nMonster Energy Original,1,10,3.01,1.1,15,180\nPoland Springs Water,1,9,1.54,0.5,14,365\nSunkist Soda - Orange,1,6,1.32,0.5,10,180\nKitKat - Crisp Wafers,1,5,2.16,0.8,10,120\nRed Bull - Original,1,5,3.4,1.2,10,180\nSunChips Multigrain - Harvest Cheddar,1,5,1.5,0.5,10,120\nCheezIt - Original,1,4,1.56,0.5,10,120\nWonderful Pistachios - Variety,1,4,2.0,0.7,10,120\nGoldfish Baked - Cheddar,1,3,1.31,0.5,10,120\nOreo Mini,1,3,1.66,0.6,10,120\nSnapple Tea - Raspberry,1,3,2.52,0.9,10,180",
+      "meta": {
+        "source": "vending_machine_sales.csv",
+        "transactions": 9617,
+        "productsUsed": 12,
+        "year": "2022",
+        "sampleProducts": [
+          "Coca Cola - Zero Sugar",
+          "Monster Energy Original",
+          "Poland Springs Water",
+          "Sunkist Soda - Orange",
+          "KitKat - Crisp Wafers",
+          "Red Bull - Original"
+        ]
+      }
+    },
+    {
+      "id": "gym-real",
+      "dataType": "real",
+      "icon": "💪",
+      "name": "深圳腾讯总部附近健身房",
+      "tagline": "码农练后补给站",
+      "deviceId": "VM-REAL-GYM",
+      "location": "深圳南山区科技园（腾讯滨海大厦相邻地铁站）健身房",
+      "city": "深圳",
+      "weather": {
+        "temp": 29,
+        "rain": 0,
+        "humidity": 70
+      },
+      "event": "无",
+      "holiday": false,
+      "demographics": {
+        "genderRatio": "男性 60%",
+        "ageRange": "22-35 岁"
+      },
+      "inventoryNotes": "蛋白/电解质类动销快，香蕉类需每日补货。",
+      "salesData": "商品,昨日销量,周销量,单价,单位利润,库存,保质期天数\nMonster Energy Original,1,10,3.01,1.1,15,180\nPoland Springs Water,1,9,1.54,0.5,14,365\nRed Bull - Original,1,5,3.4,1.2,10,180\nWonderful Pistachios - Variety,1,4,2.0,0.7,10,120\nRobert Irvine's - Fit Crunch -  Chocolate Pea,1,3,2.0,0.7,10,120\nSnapple Tea - Raspberry,1,3,2.52,0.9,10,180\nStarbucks Doubleshot Energy - Mocha,1,3,3.54,1.2,10,180\nStarbucks Refresher - Real Coconut Water,1,2,3.04,1.1,10,180\nBai Antioxidant - Tanzania Lemon Super Tea,1,1,2.75,1.0,10,180\nVitamin Water - Squeezed Lemonade,1,1,2.71,0.9,10,365\nRed Bull - Energy Drink - Sugar Free,1,1,3.5,1.2,10,180",
+      "meta": {
+        "source": "vending_machine_sales.csv",
+        "transactions": 9617,
+        "productsUsed": 11,
+        "year": "2022",
+        "sampleProducts": [
+          "Monster Energy Original",
+          "Poland Springs Water",
+          "Red Bull - Original",
+          "Wonderful Pistachios - Variety",
+          "Robert Irvine's - Fit Crunch -  Chocolate Pea",
+          "Snapple Tea - Raspberry"
+        ]
+      }
+    },
+    {
+      "id": "metro-real",
+      "dataType": "real",
+      "icon": "🚇",
+      "name": "奥林匹克公园(鸟巢站)",
+      "tagline": "观赛游园的 30 秒补给",
+      "deviceId": "VM-REAL-MET",
+      "location": "北京奥林匹克公园地铁站（8/15 号线，鸟巢与水立方之间）",
+      "city": "北京",
+      "weather": {
+        "temp": 25,
+        "rain": 5,
+        "humidity": 55
+      },
+      "event": "无",
+      "holiday": false,
+      "demographics": {
+        "genderRatio": "游客与通勤混合",
+        "ageRange": "全年龄段"
+      },
+      "inventoryNotes": "旅游旺季矿泉水与冷饮需求高，雨季备好湿巾。",
+      "salesData": "商品,昨日销量,周销量,单价,单位利润,库存,保质期天数\nCoca Cola - Zero Sugar,2,13,1.49,0.5,20,180\nMonster Energy Original,1,10,3.01,1.1,15,180\nPoland Springs Water,1,9,1.54,0.5,14,365\nSunkist Soda - Orange,1,6,1.32,0.5,10,180\nKitKat - Crisp Wafers,1,5,2.16,0.8,10,120\nRed Bull - Original,1,5,3.4,1.2,10,180\nSunChips Multigrain - Harvest Cheddar,1,5,1.5,0.5,10,120\nCheezIt - Original,1,4,1.56,0.5,10,120\nGoldfish Baked - Cheddar,1,3,1.31,0.5,10,120\nOreo Mini,1,3,1.66,0.6,10,120\nCheetos - Fleming Hot Crunchy,1,2,1.61,0.6,10,120\nFunyuns - Flaming Hot,1,2,1.52,0.5,10,120",
+      "meta": {
+        "source": "vending_machine_sales.csv",
+        "transactions": 9617,
+        "productsUsed": 12,
+        "year": "2022",
+        "sampleProducts": [
+          "Coca Cola - Zero Sugar",
+          "Monster Energy Original",
+          "Poland Springs Water",
+          "Sunkist Soda - Orange",
+          "KitKat - Crisp Wafers",
+          "Red Bull - Original"
+        ]
+      }
+    },
+    {
+      "id": "sanlitun-real",
+      "dataType": "real",
+      "icon": "🌃",
+      "name": "三里屯 SO·HO 酒吧街柜",
+      "tagline": "夜经济里的微醺补给",
+      "deviceId": "VM-REAL-SAN",
+      "location": "三里屯 SO·HO 露天广场",
+      "city": "北京",
+      "weather": {
+        "temp": 32,
+        "rain": 0,
+        "humidity": 40
+      },
+      "event": "周末酒吧聚会高峰",
+      "holiday": false,
+      "demographics": {
+        "genderRatio": "女性 67%",
+        "ageRange": "20-35 岁"
+      },
+      "inventoryNotes": "无糖/低卡品类动销快，注意及时补。",
+      "salesData": "商品,昨日销量,周销量,单价,单位利润,库存,保质期天数\nCoca Cola - Zero Sugar,2,13,1.49,0.5,20,180\nMonster Energy Original,1,10,3.01,1.1,15,180\nPoland Springs Water,1,9,1.54,0.5,14,365\nSunkist Soda - Orange,1,6,1.32,0.5,10,180\nKitKat - Crisp Wafers,1,5,2.16,0.8,10,120\nRed Bull - Original,1,5,3.4,1.2,10,180\nSunChips Multigrain - Harvest Cheddar,1,5,1.5,0.5,10,120\nCheezIt - Original,1,4,1.56,0.5,10,120\nOreo Mini,1,3,1.66,0.6,10,120\nSnapple Tea - Raspberry,1,3,2.52,0.9,10,180\nStarbucks Doubleshot Energy - Mocha,1,3,3.54,1.2,10,180\nCheetos - Fleming Hot Crunchy,1,2,1.61,0.6,10,120",
+      "meta": {
+        "source": "vending_machine_sales.csv",
+        "transactions": 9617,
+        "productsUsed": 12,
+        "year": "2022",
+        "sampleProducts": [
+          "Coca Cola - Zero Sugar",
+          "Monster Energy Original",
+          "Poland Springs Water",
+          "Sunkist Soda - Orange",
+          "KitKat - Crisp Wafers",
+          "Red Bull - Original"
+        ]
+      }
+    }
+  ]
+}

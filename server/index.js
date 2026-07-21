@@ -11,6 +11,7 @@ import { mockAnalysis } from './mock.js';
 import { extractStructured, extractDecision } from './parse.js';
 import { scenarios, getScenario } from './scenarios.js';
 import { sso } from './sso.js';
+import { getRealScenarios, getRealResult, ensureRealCache, ensureOne } from './realdata.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(__dirname, '..', 'public');
@@ -189,6 +190,17 @@ const server = http.createServer((req, res) => {
   const u = req.url.split('?')[0];
   if (req.method === 'GET' && u === '/api/health') return sendJSON(res, 200, { ok: true, configured: !!API_KEY, mock: !API_KEY, server: INFINI_SERVER, sso: sso.isEnabled() });
   if (req.method === 'GET' && u === '/api/scenarios') return sendJSON(res, 200, { scenarios });
+  if (req.method === 'GET' && u === '/api/real-scenarios') return sendJSON(res, 200, { scenarios: getRealScenarios() });
+  if (req.method === 'GET' && u.startsWith('/api/real-analysis/')) {
+    const id = u.slice('/api/real-analysis/'.length);
+    const cached = getRealResult(id);
+    if (cached) return sendJSON(res, 200, cached);
+    // 缓存缺失：触发兜底生成（通常已在启动时完成）
+    return ensureOne(id).then(r => {
+      if (r) sendJSON(res, 200, { result: r, generated: true });
+      else sendJSON(res, 404, { error: '已有数据场景不存在' });
+    }).catch(e => sendJSON(res, 500, { error: String(e && e.message ? e.message : e) }));
+  }
   if (req.method === 'GET' && u.startsWith('/api/scenario/')) {
     const s = getScenario(u.slice('/api/scenario/'.length));
     return s ? sendJSON(res, 200, s) : sendJSON(res, 404, { error: '场景不存在' });
@@ -209,4 +221,6 @@ server.listen(PORT, () => {
   console.log(`  分析接口: ${API_KEY ? '真实 InfiniSynapse' : '演示模式'}`);
   console.log(`  Partner SSO: ${sso.isEnabled() ? '已启用 (' + sso.getClientId() + ')' : '未配置（匿名访客回落主 key）'}`);
   console.log(`  回调地址: ${sso.callbackUrl()}`);
+  // 「已有数据」缓存兜底：缺失的预生成（通常已在部署前完成并提交）
+  ensureRealCache().then(n => console.log(`  已有数据缓存就绪：${n}/${scenarios.length + getRealScenarios().length}`)).catch(() => {});
 });

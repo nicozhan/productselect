@@ -122,14 +122,18 @@ export function mockAnalysis(inputs = {}) {
   // 构造与真实接口同构的 Markdown 报告
   const subOf = (s) => subsKeys.map(k => s.subs[k]).join(' / ');
   const scoreRows = scores.map(s => '| ' + s.product + ' | ' + s.total + ' | ' + subOf(s) + ' | ' + s.suggestion + ' |').join('\n');
-  const basketLines = pairs.map(p => '- **' + p.a + ' + ' + p.b + '**：用户一起买占比 ' + (p.rate * 100).toFixed(0) +
-    '%，交叉销售建议增加 ' + p.suggestAdd.join('、') + '，预计销量提升 ' + (p.uplift * 100).toFixed(0) + '%').join('\n');
-  const tomorrowLines = tomorrow.map(t => {
-    const tag = t.action === '不补' ? '⛔ 暂不补' : '✅ 增加';
-    const qty = t.qty ? ' ' + t.qty + ' 件' : '';
-    const up = t.predictUplift ? '，预计销量 ×' + t.predictUplift : '';
-    return '- ' + tag + ' **' + t.product + '**' + qty + up;
-  }).join('\n');
+  const basketLines = ['| 搭配组合 | 关联强度 | 场景逻辑 | 交叉销售建议 | 销量提升 |', '| --- | --- | --- | --- | --- |']
+    .concat(pairs.map(p => `| ${p.a} + ${p.b} | ${(p.rate * 100).toFixed(0)}% | 高频同购，建议相邻陈列 | 增加 ${p.suggestAdd.join('、')} | ${(p.uplift * 100).toFixed(0)}%`))
+    .join('\n');
+  const tomorrowLines = ['| 商品 | 行动 | 建议补货量 | 明日预测销量 | vs 昨日 | 理由 |', '| --- | --- | --- | --- | --- | --- |']
+    .concat(tomorrow.map(t => {
+      const tag = t.action === '不补' ? '⛔ 暂不补' : '✅ 增加';
+      const qty = t.qty ? t.qty + ' 件' : '—';
+      const up = t.predictUplift ? '×' + t.predictUplift : '—';
+      const reason = t.action === '不补' ? '动销偏低，避免积压' : '需求回升，提前铺货';
+      return `| ${t.product} | ${tag} | ${qty} | ${up} | — | ${reason} |`;
+    }))
+    .join('\n');
 
   const reportText = '# AI 选品大脑 · 分析报告（演示模式）\n\n' +
     '> ⚠️ 当前为**演示模式**（未配置 INFINI_API_KEY）。下方为结构完全一致的模拟数据，配置真实 Key 后将由 InfiniSynapse 实时生成。\n\n' +

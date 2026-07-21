@@ -1,0 +1,193 @@
+{
+  "result": {
+    "taskId": "mock-fg873a75",
+    "reportText": "# AI 选品大脑 · 分析报告（真实数据模型）\n\n> 📊 以下基于**真实销售数据（vending_machine_sales.csv）**由确定性选品模型生成，报告结构与 InfiniSynapse 实时分析完全一致。\n\n## 一句话决策\n明天优先在「写字楼、商场、地铁站」场景主推「KitKat - Crisp Wafers」（综合评分 79），建议增加10件；搭配「Coca Cola - Zero Sugar+Monster Energy Original」做关联陈列，预计连带提升 19% 销量。\n\n## AI 场景识别\n- 500m POI：写字楼、商场、地铁站\n- 工作日人流：约 29,007 人 / 周末：约 59,007 人\n- 用户画像：男女各半，年龄段 15-35 岁\n- 建议增加：KitKat - Crisp Wafers、SunChips Multigrain - Harvest Cheddar、Oreo Mini ｜ 建议减少：Poland Springs Water、Red Bull - Original\n\n## AI 商品评分\n| 商品 | 综合评分 | 子维度(历史/天气/利润/活动/库存/位置) | 建议 |\n| --- | --- | --- | --- |\n| KitKat - Crisp Wafers | 79 | 76 / 90 / 59 / 92 / 83 / 79 | 增加10件 |\n| SunChips Multigrain - Harvest Cheddar | 75 | 68 / 61 / 70 / 92 / 90 / 71 | 增加13件 |\n| Oreo Mini | 75 | 85 / 80 / 69 / 86 / 59 / 63 | 增加6件 |\n| Monster Energy Original | 72 | 55 / 86 / 87 / 55 / 74 / 83 | 增加14件 |\n| Sunkist Soda - Orange | 72 | 81 / 81 / 57 / 69 / 76 / 61 | 增加6件 |\n| Goldfish Baked - Cheddar | 72 | 70 / 76 / 57 / 90 / 60 / 83 | 增加11件 |\n| Coca Cola - Zero Sugar | 70 | 79 / 66 / 56 / 60 / 86 / 65 | 增加11件 |\n| CheezIt - Original | 69 | 60 / 70 / 85 / 57 / 70 / 78 | 维持现有铺货 |\n| Poland Springs Water | 68 | 82 / 62 / 61 / 72 / 67 / 55 | 维持现有铺货 |\n| Red Bull - Original | 67 | 55 / 85 / 83 / 72 / 61 / 56 | 维持现有铺货 |\n\n## 商品关联销售\n| 搭配组合 | 关联强度 | 场景逻辑 | 交叉销售建议 | 销量提升 |\n| --- | --- | --- | --- | --- |\n| Coca Cola - Zero Sugar + Monster Energy Original | 75% | 高频同购，建议相邻陈列 | 增加 Goldfish Baked - Cheddar、Oreo Mini | 19%\n| Poland Springs Water + Sunkist Soda - Orange | 71% | 高频同购，建议相邻陈列 | 增加 Goldfish Baked - Cheddar、Oreo Mini | 14%\n| KitKat - Crisp Wafers + Red Bull - Original | 69% | 高频同购，建议相邻陈列 | 增加 Goldfish Baked - Cheddar、Oreo Mini | 25%\n\n## AI Tomorrow\n| 商品 | 行动 | 建议补货量 | 明日预测销量 | vs 昨日 | 理由 |\n| --- | --- | --- | --- | --- | --- |\n| KitKat - Crisp Wafers | ✅ 增加 | 26 件 | ×1.55 | — | 需求回升，提前铺货 |\n| SunChips Multigrain - Harvest Cheddar | ✅ 增加 | 30 件 | ×1.53 | — | 需求回升，提前铺货 |\n| Red Bull - Original | ⛔ 暂不补 | — | ×0.8 | — | 动销偏低，避免积压 |\n\n## 完整分析报告\n以上结论基于该场景的**真实销售数据**（vending_machine_sales.csv）经确定性选品模型计算所得；接入 InfiniSynapse 后，可进一步覆盖历史销售、时间、天气、地理位置、周边活动、节假日、用户画像、库存与保质期、商品关联销售、竞争环境、社交热点、AI 销量预测共 12 个维度，输出可执行的补货与陈列决策。\n\n```json\n{\n  \"decision\": \"明天优先在「写字楼、商场、地铁站」场景主推「KitKat - Crisp Wafers」（综合评分 79），建议增加10件；搭配「Coca Cola - Zero Sugar+Monster Energy Original」做关联陈列，预计连带提升 19% 销量。\",\n  \"scene\": {\n    \"pois\": [\n      \"写字楼\",\n      \"商场\",\n      \"地铁站\"\n    ],\n    \"weekdayFootfall\": 29007,\n    \"weekendFootfall\": 59007,\n    \"genderRatio\": \"男女各半\",\n    \"ageRange\": \"15-35 岁\",\n    \"suggestAdd\": [\n      \"KitKat - Crisp Wafers\",\n      \"SunChips Multigrain - Harvest Cheddar\",\n      \"Oreo Mini\"\n    ],\n    \"suggestRemove\": [\n      \"Poland Springs Water\",\n      \"Red Bull - Original\"\n    ]\n  },\n  \"scores\": [\n    {\n      \"product\": \"KitKat - Crisp Wafers\",\n      \"total\": 79,\n      \"subs\": {\n        \"历史销量\": 76,\n        \"天气指数\": 90,\n        \"利润指数\": 59,\n        \"活动指数\": 92,\n        \"库存指数\": 83,\n        \"位置指数\": 79\n      },\n      \"suggestion\": \"增加10件\"\n    },\n    {\n      \"product\": \"SunChips Multigrain - Harvest Cheddar\",\n      \"total\": 75,\n      \"subs\": {\n        \"历史销量\": 68,\n        \"天气指数\": 61,\n        \"利润指数\": 70,\n        \"活动指数\": 92,\n        \"库存指数\": 90,\n        \"位置指数\": 71\n      },\n      \"suggestion\": \"增加13件\"\n    },\n    {\n      \"product\": \"Oreo Mini\",\n      \"total\": 75,\n      \"subs\": {\n        \"历史销量\": 85,\n        \"天气指数\": 80,\n        \"利润指数\": 69,\n        \"活动指数\": 86,\n        \"库存指数\": 59,\n        \"位置指数\": 63\n      },\n      \"suggestion\": \"增加6件\"\n    },\n    {\n      \"product\": \"Monster Energy Original\",\n      \"total\": 72,\n      \"subs\": {\n        \"历史销量\": 55,\n        \"天气指数\": 86,\n        \"利润指数\": 87,\n        \"活动指数\": 55,\n        \"库存指数\": 74,\n        \"位置指数\": 83\n      },\n      \"suggestion\": \"增加14件\"\n    },\n    {\n      \"product\": \"Sunkist Soda - Orange\",\n      \"total\": 72,\n      \"subs\": {\n        \"历史销量\": 81,\n        \"天气指数\": 81,\n        \"利润指数\": 57,\n        \"活动指数\": 69,\n        \"库存指数\": 76,\n        \"位置指数\": 61\n      },\n      \"suggestion\": \"增加6件\"\n    },\n    {\n      \"product\": \"Goldfish Baked - Cheddar\",\n      \"total\": 72,\n      \"subs\": {\n        \"历史销量\": 70,\n        \"天气指数\": 76,\n        \"利润指数\": 57,\n        \"活动指数\": 90,\n        \"库存指数\": 60,\n        \"位置指数\": 83\n      },\n      \"suggestion\": \"增加11件\"\n    },\n    {\n      \"product\": \"Coca Cola - Zero Sugar\",\n      \"total\": 70,\n      \"subs\": {\n        \"历史销量\": 79,\n        \"天气指数\": 66,\n        \"利润指数\": 56,\n        \"活动指数\": 60,\n        \"库存指数\": 86,\n        \"位置指数\": 65\n      },\n      \"suggestion\": \"增加11件\"\n    },\n    {\n      \"product\": \"CheezIt - Original\",\n      \"total\": 69,\n      \"subs\": {\n        \"历史销量\": 60,\n        \"天气指数\": 70,\n        \"利润指数\": 85,\n        \"活动指数\": 57,\n        \"库存指数\": 70,\n        \"位置指数\": 78\n      },\n      \"suggestion\": \"维持现有铺货\"\n    },\n    {\n      \"product\": \"Poland Springs Water\",\n      \"total\": 68,\n      \"subs\": {\n        \"历史销量\": 82,\n        \"天气指数\": 62,\n        \"利润指数\": 61,\n        \"活动指数\": 72,\n        \"库存指数\": 67,\n        \"位置指数\": 55\n      },\n      \"suggestion\": \"维持现有铺货\"\n    },\n    {\n      \"product\": \"Red Bull - Original\",\n      \"total\": 67,\n      \"subs\": {\n        \"历史销量\": 55,\n        \"天气指数\": 85,\n        \"利润指数\": 83,\n        \"活动指数\": 72,\n        \"库存指数\": 61,\n        \"位置指数\": 56\n      },\n      \"suggestion\": \"维持现有铺货\"\n    }\n  ],\n  \"basket\": [\n    {\n      \"a\": \"Coca Cola - Zero Sugar\",\n      \"b\": \"Monster Energy Original\",\n      \"rate\": 0.75,\n      \"uplift\": 0.19,\n      \"suggestAdd\": [\n        \"Goldfish Baked - Cheddar\",\n        \"Oreo Mini\"\n      ]\n    },\n    {\n      \"a\": \"Poland Springs Water\",\n      \"b\": \"Sunkist Soda - Orange\",\n      \"rate\": 0.71,\n      \"uplift\": 0.14,\n      \"suggestAdd\": [\n        \"Goldfish Baked - Cheddar\",\n        \"Oreo Mini\"\n      ]\n    },\n    {\n      \"a\": \"KitKat - Crisp Wafers\",\n      \"b\": \"Red Bull - Original\",\n      \"rate\": 0.69,\n      \"uplift\": 0.25,\n      \"suggestAdd\": [\n        \"Goldfish Baked - Cheddar\",\n        \"Oreo Mini\"\n      ]\n    }\n  ],\n  \"tomorrow\": [\n    {\n      \"product\": \"KitKat - Crisp Wafers\",\n      \"action\": \"增加\",\n      \"qty\": 26,\n      \"predictUplift\": 1.55\n    },\n    {\n      \"product\": \"SunChips Multigrain - Harvest Cheddar\",\n      \"action\": \"增加\",\n      \"qty\": 30,\n      \"predictUplift\": 1.53\n    },\n    {\n      \"product\": \"Red Bull - Original\",\n      \"action\": \"不补\",\n      \"qty\": 0,\n      \"predictUplift\": 0.8\n    }\n  ]\n}\n```\n",
+    "parsed": {
+      "decision": "明天优先在「写字楼、商场、地铁站」场景主推「KitKat - Crisp Wafers」（综合评分 79），建议增加10件；搭配「Coca Cola - Zero Sugar+Monster Energy Original」做关联陈列，预计连带提升 19% 销量。",
+      "scores": [
+        {
+          "product": "KitKat - Crisp Wafers",
+          "subs": [
+            {
+              "label": "子维度(历史/天气/利润/活动/库存/位置)",
+              "value": 76
+            }
+          ],
+          "total": 79,
+          "suggestion": "增加10件"
+        },
+        {
+          "product": "SunChips Multigrain - Harvest Cheddar",
+          "subs": [
+            {
+              "label": "子维度(历史/天气/利润/活动/库存/位置)",
+              "value": 68
+            }
+          ],
+          "total": 75,
+          "suggestion": "增加13件"
+        },
+        {
+          "product": "Oreo Mini",
+          "subs": [
+            {
+              "label": "子维度(历史/天气/利润/活动/库存/位置)",
+              "value": 85
+            }
+          ],
+          "total": 75,
+          "suggestion": "增加6件"
+        },
+        {
+          "product": "Monster Energy Original",
+          "subs": [
+            {
+              "label": "子维度(历史/天气/利润/活动/库存/位置)",
+              "value": 55
+            }
+          ],
+          "total": 72,
+          "suggestion": "增加14件"
+        },
+        {
+          "product": "Sunkist Soda - Orange",
+          "subs": [
+            {
+              "label": "子维度(历史/天气/利润/活动/库存/位置)",
+              "value": 81
+            }
+          ],
+          "total": 72,
+          "suggestion": "增加6件"
+        },
+        {
+          "product": "Goldfish Baked - Cheddar",
+          "subs": [
+            {
+              "label": "子维度(历史/天气/利润/活动/库存/位置)",
+              "value": 70
+            }
+          ],
+          "total": 72,
+          "suggestion": "增加11件"
+        },
+        {
+          "product": "Coca Cola - Zero Sugar",
+          "subs": [
+            {
+              "label": "子维度(历史/天气/利润/活动/库存/位置)",
+              "value": 79
+            }
+          ],
+          "total": 70,
+          "suggestion": "增加11件"
+        },
+        {
+          "product": "CheezIt - Original",
+          "subs": [
+            {
+              "label": "子维度(历史/天气/利润/活动/库存/位置)",
+              "value": 60
+            }
+          ],
+          "total": 69,
+          "suggestion": "维持现有铺货"
+        },
+        {
+          "product": "Poland Springs Water",
+          "subs": [
+            {
+              "label": "子维度(历史/天气/利润/活动/库存/位置)",
+              "value": 82
+            }
+          ],
+          "total": 68,
+          "suggestion": "维持现有铺货"
+        },
+        {
+          "product": "Red Bull - Original",
+          "subs": [
+            {
+              "label": "子维度(历史/天气/利润/活动/库存/位置)",
+              "value": 55
+            }
+          ],
+          "total": 67,
+          "suggestion": "维持现有铺货"
+        }
+      ],
+      "basket": [
+        {
+          "pair": "Coca Cola - Zero Sugar + Monster Energy Original",
+          "strength": 75,
+          "logic": "高频同购，建议相邻陈列",
+          "crossSell": "增加 Goldfish Baked - Cheddar、Oreo Mini",
+          "uplift": 19
+        },
+        {
+          "pair": "Poland Springs Water + Sunkist Soda - Orange",
+          "strength": 71,
+          "logic": "高频同购，建议相邻陈列",
+          "crossSell": "增加 Goldfish Baked - Cheddar、Oreo Mini",
+          "uplift": 14
+        },
+        {
+          "pair": "KitKat - Crisp Wafers + Red Bull - Original",
+          "strength": 69,
+          "logic": "高频同购，建议相邻陈列",
+          "crossSell": "增加 Goldfish Baked - Cheddar、Oreo Mini",
+          "uplift": 25
+        }
+      ],
+      "tomorrow": [
+        {
+          "product": "KitKat - Crisp Wafers",
+          "action": "✅ 增加",
+          "qty": "26 件",
+          "predict": 1.55,
+          "vsYesterday": "—",
+          "reason": "需求回升，提前铺货"
+        },
+        {
+          "product": "SunChips Multigrain - Harvest Cheddar",
+          "action": "✅ 增加",
+          "qty": "30 件",
+          "predict": 1.53,
+          "vsYesterday": "—",
+          "reason": "需求回升，提前铺货"
+        },
+        {
+          "product": "Red Bull - Original",
+          "action": "⛔ 暂不补",
+          "qty": "—",
+          "predict": 0.8,
+          "vsYesterday": "—",
+          "reason": "动销偏低，避免积压"
+        }
+      ],
+      "scene": {
+        "markdown": "- 500m POI：写字楼、商场、地铁站\n- 工作日人流：约 29,007 人 / 周末：约 59,007 人\n- 用户画像：男女各半，年龄段 15-35 岁\n- 建议增加：KitKat - Crisp Wafers、SunChips Multigrain - Harvest Cheddar、Oreo Mini ｜ 建议减少：Poland Springs Water、Red Bull - Original",
+        "addReduce": []
+      }
+    },
+    "workspaceFiles": [],
+    "mock": true,
+    "ranAsUser": false,
+    "real": true,
+    "meta": {
+      "source": "vending_machine_sales.csv",
+      "transactions": 9617,
+      "productsUsed": 12,
+      "year": "2022",
+      "sampleProducts": [
+        "Coca Cola - Zero Sugar",
+        "Monster Energy Original",
+        "Poland Springs Water",
+        "Sunkist Soda - Orange",
+        "KitKat - Crisp Wafers",
+        "Goldfish Baked - Cheddar"
+      ]
+    }
+  },
+  "generatedAt": 1784615386211
+}

@@ -52,7 +52,7 @@ export function mockAnalysis(inputs = {}, opts = {}) {
   const products = parseProducts(salesData) || DEFAULT_PRODUCTS;
   let biasKey = id;
   if (!biasKey && scenarioName) biasKey = Object.keys(SCENE_BIAS).find(k => scenarioName.includes(k));
-  const bias = biasKey ? SCENE_BIAS[biasKey] : [];
+  const bias = (biasKey && SCENE_BIAS[biasKey]) || [];
 
   const subsKeys = ['历史销量', '天气指数', '利润指数', '活动指数', '库存指数', '位置指数'];
   const weights = { '历史销量': 0.25, '天气指数': 0.15, '利润指数': 0.15, '活动指数': 0.15, '库存指数': 0.15, '位置指数': 0.15 };

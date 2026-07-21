@@ -44,6 +44,11 @@ async function init() {
 
   $('#customRun').addEventListener('click', () => runAnalyze(readForm()));
 
+  // 上传数据二维码弹窗：点击遮罩或关闭按钮关闭
+  document.querySelectorAll('#qrModal [data-close]').forEach(el =>
+    el.addEventListener('click', closeQrModal));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeQrModal(); });
+
   // 登录态
   refreshAuth();
 }
@@ -97,6 +102,25 @@ function renderScenarios() {
     card.addEventListener('click', () => isReal ? runRealAnalysis(s) : runAnalyze(s));
     grid.appendChild(card);
   });
+
+  // 末尾固定追加「上传你的数据」块（+/加号），点击弹出微信二维码
+  const up = document.createElement('div');
+  up.className = 'scenario-card upload-card';
+  up.innerHTML = `
+    <div class="upload-plus">+</div>
+    <div class="name">上传你的数据</div>
+    <div class="tag">用自己的售货柜数据，让 AI 帮你选品</div>`;
+  up.addEventListener('click', openQrModal);
+  grid.appendChild(up);
+}
+
+function openQrModal() {
+  const m = $('#qrModal');
+  if (m) m.classList.remove('hidden');
+}
+function closeQrModal() {
+  const m = $('#qrModal');
+  if (m) m.classList.add('hidden');
 }
 
 function readForm() {

@@ -28,17 +28,17 @@ export const scenarios = [
   },
   {
     id: 'campus',
-    name: '高校宿舍区柜',
+    name: '浙江大学紫金港校区',
     icon: '🎓',
-    tagline: '深夜自习后的快乐水自由',
+    tagline: '求是园里的深夜补给站',
     deviceId: 'VM-EDU-007',
-    location: '某 211 大学宿舍区便利店旁',
-    city: '武汉',
+    location: '浙江大学紫金港校区宿舍区及周边',
+    city: '杭州',
     weather: { temp: 26, rain: 0, humidity: 60 },
     event: '无',
     holiday: false,
-    demographics: { genderRatio: '男女各半', ageRange: '18-22 岁' },
-    inventoryNotes: '泡面与火腿肠周转快，注意防潮。',
+    demographics: { genderRatio: '男女各半', ageRange: '18-24 岁' },
+    inventoryNotes: '期末/假期客流波动大，泡面与零食周转快，注意临期清货。',
     salesData: `商品,昨日销量,周销量,单价,单位利润,库存,保质期天数
 可乐,55,388,3,0.6,120,180
 薯片,48,330,6,2,80,120
@@ -51,25 +51,27 @@ export const scenarios = [
   },
   {
     id: 'gym',
-    name: '健身房能量柜',
-    icon: '💪',
-    tagline: '练前练后的补给站',
+    name: '深圳BYD工厂',
+    icon: '🏭',
+    tagline: '码农练后补给站',
     deviceId: 'VM-GYM-012',
-    location: '连锁健身房前台旁',
-    city: '上海',
-    weather: { temp: 24, rain: 0, humidity: 50 },
+    location: '深圳BYD工厂',
+    city: '深圳',
+    weather: { temp: 29, rain: 0, humidity: 65 },
     event: '无',
     holiday: false,
-    demographics: { genderRatio: '男性 65%', ageRange: '20-35 岁' },
-    inventoryNotes: '香蕉需每日补货，易熟。',
+    demographics: { genderRatio: '男性 70%', ageRange: '22-40 岁' },
+    inventoryNotes: '产线轮班节奏固定，午后与夜班能量补给需求集中，饮用水与功能饮料周转快。',
     salesData: `商品,昨日销量,周销量,单价,单位利润,库存,保质期天数
-蛋白棒,40,280,12,5,45,180
-运动饮料,38,260,8,3,70,365
-矿泉水,50,350,2,0.5,200,365
-能量胶,22,150,15,6,30,365
-香蕉,35,240,3,1,25,3
-黑咖啡,28,190,6,2,40,120
-电解质水,26,180,10,4,55,365
+矿泉水,70,490,2,0.5,250,365
+功能饮料,46,320,6,2,80,365
+蛋白棒,38,260,12,5,45,180
+运动饮料,40,280,8,3,70,365
+黑咖啡,34,230,6,2,40,120
+香蕉,30,210,3,1,25,3
+电解质水,28,190,10,4,55,365
+巧克力,24,160,8,3,50,300
+能量胶,20,140,15,6,30,365
 鸡胸肉,18,120,13,4,20,7`
   },
   {

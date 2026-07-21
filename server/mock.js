@@ -139,7 +139,7 @@ export function mockAnalysis(inputs = {}, opts = {}) {
   const modeTitle = realData ? '（真实数据模型）' : '（演示模式）';
   const modeLine = realData
     ? '> 📊 以下基于**真实销售数据（vending_machine_sales.csv）**由确定性选品模型生成，报告结构与 InfiniSynapse 实时分析完全一致。'
-    : '> ⚠️ 当前为**演示模式**（未配置 INFINI_API_KEY）。下方为结构完全一致的模拟数据，配置真实 Key 后将由 InfiniSynapse 实时生成。';
+    : '> ⚠️ 以下为**结构一致的演示数据**（实时分析调用暂未返回）。接入 InfiniSynapse 后将由 AI 实时生成可执行决策。';
   const reportText = '# AI 选品大脑 · 分析报告' + modeTitle + '\n\n' + modeLine + '\n\n' +
     '## 一句话决策\n' + decision + '\n\n' +
     '## AI 场景识别\n' +

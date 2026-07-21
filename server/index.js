@@ -206,6 +206,6 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
   console.log(`AI 选品大脑 已启动: http://localhost:${PORT}`);
   console.log(`  分析接口: ${API_KEY ? '真实 InfiniSynapse' : '演示模式'}`);
-  console.log(`  Partner SSO: ${sso.isEnabled() ? '已启用 (' + sso.CLIENT_ID + ')' : '未配置（匿名访客回落主 key）'}`);
+  console.log(`  Partner SSO: ${sso.isEnabled() ? '已启用 (' + sso.getClientId() + ')' : '未配置（匿名访客回落主 key）'}`);
   console.log(`  回调地址: ${sso.callbackUrl()}`);
 });

@@ -2,15 +2,20 @@
 // InfiniSynapse Partner SSO 客户端 + 零依赖会话管理。
 // 参考：InfiniSynapse Partner SSO Integration Guide
 // 关键：clientSecret 与用户 apiKey 都只在服务端，绝不进前端。
+//
+// 注意：本项目用零依赖方式在 index.js 里加载 .env，而 ES module 的 import 会在
+// index.js 顶层语句之前执行，因此这里**不能在模块加载时**读取 process.env，
+// 必须改为「惰性读取」（调用时才读），否则拿不到 .env 里的 INFINI_CLIENT_SECRET。
 import crypto from 'crypto';
 
-const SSO_API = (process.env.INFINI_SSO_API || 'https://api.infinisynapse.cn/api').replace(/\/$/, '');
-const CLIENT_ID = process.env.INFINI_CLIENT_ID || '';
-const CLIENT_SECRET = process.env.INFINI_CLIENT_SECRET || '';
-const PORT = process.env.PORT || 3000;
-const SELF_ORIGIN = (process.env.SELF_ORIGIN || `http://127.0.0.1:${PORT}`).replace(/\/$/, '');
+function env(name, dflt = '') { return process.env[name] || dflt; }
 
-const ssoEnabled = !!(CLIENT_ID && CLIENT_SECRET);
+function getSsoApi() { return (env('INFINI_SSO_API') || 'https://api.infinisynapse.cn/api').replace(/\/$/, ''); }
+function getClientId() { return env('INFINI_CLIENT_ID'); }
+function getClientSecret() { return env('INFINI_CLIENT_SECRET'); }
+function getPort() { return env('PORT') || '3000'; }
+function getSelfOrigin() { return (env('SELF_ORIGIN') || `http://127.0.0.1:${getPort()}`).replace(/\/$/, ''); }
+function ssoEnabled() { return !!(getClientId() && getClientSecret()); }
 
 // 内存会话表：sid -> { user, apiKey, createdAt }
 // 说明：零依赖最小实现；多实例部署请用 Redis 等共享存储。
@@ -23,14 +28,14 @@ function genState() { return crypto.randomBytes(16).toString('hex'); }
 function ssoHeaders() {
   return {
     'Content-Type': 'application/json',
-    'X-Client-Id': CLIENT_ID,
-    'X-Client-Secret': CLIENT_SECRET,
+    'X-Client-Id': getClientId(),
+    'X-Client-Secret': getClientSecret(),
   };
 }
 
 // ① 创建登录会话，返回 { sessionId, entryUrl, expiresIn }
 async function createSession(returnUrl, state) {
-  const resp = await fetch(`${SSO_API}/auth/partner/sessions`, {
+  const resp = await fetch(`${getSsoApi()}/auth/partner/sessions`, {
     method: 'POST',
     headers: ssoHeaders(),
     body: JSON.stringify({ returnUrl, state }),
@@ -42,7 +47,7 @@ async function createSession(returnUrl, state) {
 
 // ④ 用一次性 code 换取用户资料；withApiKey:true 同时签发用户专属 API Key
 async function exchangeToken(code) {
-  const resp = await fetch(`${SSO_API}/auth/partner/token`, {
+  const resp = await fetch(`${getSsoApi()}/auth/partner/token`, {
     method: 'POST',
     headers: ssoHeaders(),
     body: JSON.stringify({ code, grant_type: 'authorization_code', withApiKey: true }),
@@ -66,7 +71,7 @@ function parseCookies(req) {
 }
 
 function cookieBase() {
-  const secure = SELF_ORIGIN.startsWith('https') ? '; Secure' : '';
+  const secure = getSelfOrigin().startsWith('https') ? '; Secure' : '';
   return `Path=/; HttpOnly; SameSite=Lax${secure}`;
 }
 
@@ -108,11 +113,12 @@ function getStateCookie(req) {
 }
 
 export const sso = {
-  SSO_API, CLIENT_ID, SELF_ORIGIN,
-  isEnabled: () => ssoEnabled,
+  isEnabled: ssoEnabled,
+  getClientId,
+  getSelfOrigin,
+  callbackUrl: () => `${getSelfOrigin()}/auth/infini/callback`,
   createSession, exchangeToken,
   getSession, createSessionForUser, destroySession,
   setSessionCookie, clearCookie, setStateCookie, getStateCookie,
   genState,
-  callbackUrl: () => `${SELF_ORIGIN}/auth/infini/callback`,
 };

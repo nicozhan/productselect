@@ -72,11 +72,11 @@ async function generateOne(sc) {
       mock = false;
     } catch (e) {
       console.warn('[realdata] 真实分析失败，回退 mock：', sc.id, e.message);
-      out = mockAnalysis(inputs);
+      out = mockAnalysis(inputs, { realData: true });
       mock = true;
     }
   } else {
-    out = mockAnalysis(inputs);
+    out = mockAnalysis(inputs, { realData: true });
     mock = true;
   }
   const parsed = extractStructured(out.reportText) || {};
@@ -110,6 +110,21 @@ export async function ensureRealCache() {
     }
   }
   return done;
+}
+
+// 强制重生成全部缓存（真实 API 优先 + 超时回退 mock）。用于「已有数据」结果刷新/上线前校准。
+export async function regenerateAll() {
+  let ok = 0;
+  for (const sc of scenarios) {
+    try {
+      await generateOne(sc);
+      ok++;
+      console.log('[realdata] 已重生成：', sc.id);
+    } catch (e) {
+      console.error('[realdata] 重生成失败：', sc.id, e.message);
+    }
+  }
+  return ok;
 }
 
 // 按需生成单个（供接口在缓存缺失时兜底）

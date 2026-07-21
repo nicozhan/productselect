@@ -46,7 +46,8 @@ function guessPois(location, id) {
   return [...new Set(pois)];
 }
 
-export function mockAnalysis(inputs = {}) {
+export function mockAnalysis(inputs = {}, opts = {}) {
+  const realData = !!opts.realData; // 已有数据模式：底层是真实 CSV，标签需准确
   const { scenarioName, location, demographics = {}, weather = {}, event, holiday, salesData, id } = inputs;
   const products = parseProducts(salesData) || DEFAULT_PRODUCTS;
   let biasKey = id;
@@ -135,8 +136,11 @@ export function mockAnalysis(inputs = {}) {
     }))
     .join('\n');
 
-  const reportText = '# AI 选品大脑 · 分析报告（演示模式）\n\n' +
-    '> ⚠️ 当前为**演示模式**（未配置 INFINI_API_KEY）。下方为结构完全一致的模拟数据，配置真实 Key 后将由 InfiniSynapse 实时生成。\n\n' +
+  const modeTitle = realData ? '（真实数据模型）' : '（演示模式）';
+  const modeLine = realData
+    ? '> 📊 以下基于**真实销售数据（vending_machine_sales.csv）**由确定性选品模型生成，报告结构与 InfiniSynapse 实时分析完全一致。'
+    : '> ⚠️ 当前为**演示模式**（未配置 INFINI_API_KEY）。下方为结构完全一致的模拟数据，配置真实 Key 后将由 InfiniSynapse 实时生成。';
+  const reportText = '# AI 选品大脑 · 分析报告' + modeTitle + '\n\n' + modeLine + '\n\n' +
     '## 一句话决策\n' + decision + '\n\n' +
     '## AI 场景识别\n' +
     '- 500m POI：' + scene.pois.join('、') + '\n' +
@@ -149,7 +153,9 @@ export function mockAnalysis(inputs = {}) {
     '## 商品关联销售\n' + basketLines + '\n\n' +
     '## AI Tomorrow\n' + tomorrowLines + '\n\n' +
     '## 完整分析报告\n' +
-    '本报告由演示数据生成。真实模式下，InfiniSynapse 会覆盖历史销售、时间、天气、地理位置、周边活动、节假日、用户画像、库存与保质期、商品关联销售、竞争环境、社交热点、AI 销量预测共 12 个维度，输出可执行的补货与陈列决策。\n\n' +
+    (realData
+      ? '以上结论基于该场景的**真实销售数据**（vending_machine_sales.csv）经确定性选品模型计算所得；接入 InfiniSynapse 后，可进一步覆盖历史销售、时间、天气、地理位置、周边活动、节假日、用户画像、库存与保质期、商品关联销售、竞争环境、社交热点、AI 销量预测共 12 个维度，输出可执行的补货与陈列决策。\n\n'
+      : '真实模式下，InfiniSynapse 会覆盖历史销售、时间、天气、地理位置、周边活动、节假日、用户画像、库存与保质期、商品关联销售、竞争环境、社交热点、AI 销量预测共 12 个维度，输出可执行的补货与陈列决策。\n\n') +
     '```json\n' + JSON.stringify(result, null, 2) + '\n```\n';
 
   return { taskId: 'mock-' + Math.random().toString(36).slice(2, 10), reportText, workspaceFiles: [] };

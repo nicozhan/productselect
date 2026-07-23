@@ -271,6 +271,18 @@ a:hover { text-decoration: underline; }
 }
 .decision .label { display:block; font-size: 12px; color: var(--accent-2); letter-spacing: 2px; margin-bottom: 8px; font-weight: 700; }
 
+/* 选品动作清单（独立高亮卡） */
+.card.action {
+  background: linear-gradient(135deg, #10231a, var(--card-2));
+  border-color: rgba(54,211,153,.45); box-shadow: 0 10px 40px rgba(54,211,153,.14);
+}
+.card.action h2 { color: #6ee7b7; }
+.action-list { font-size: 15px; line-height: 1.85; color: #d7f5e8; }
+.action-list ul { margin: 0; padding-left: 22px; }
+.action-list li { margin: 6px 0; }
+.action-list li::marker { color: #6ee7b7; font-weight: 700; }
+.action-list strong { color: #a7f3d0; }
+
 /* Scene */
 .scene-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 14px; }
 .scene-item { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }

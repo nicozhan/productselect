@@ -259,10 +259,12 @@ function readForm() {
   const citySel = $('#f_city').value;
   const city = citySel === '__other' ? v('#f_city_other') : citySel;
   const businessHours = Array.from(document.querySelectorAll('.bh:checked')).map(c => c.value);
+  const focus = Array.from(document.querySelectorAll('.fc:checked')).map(c => c.value);
   return {
     deviceId: v('#f_deviceId'), scenarioName: v('#f_scenarioName'),
     location: v('#f_location'), city,
     businessHours,
+    focus, // 分析重点：与模拟场景卡的 focus 一致，注入 prompt「分析重点指导」段
     // 天气与人群画像不再由用户填写，交由 AI 分析（见 prompts.js）
     event: v('#f_event'), holiday: $('#f_holiday').checked,
     inventoryNotes: v('#f_inventoryNotes'), salesData: v('#f_salesData')
@@ -319,9 +321,24 @@ function renderResults(result) {
   sec.innerHTML = '';
   sec.classList.remove('hidden');
 
+  // 从完整报告中抽取「选品动作清单」章节：单独成卡 + 从完整报告里剥离避免重复
+  let reportText = result.reportText || '';
+  const actSection = extractSection(reportText, '选品动作清单');
+  let actionListHTML = '';
+  if (actSection.content) {
+    reportText = actSection.rest;
+    actionListHTML = `<h2>🎯 选品动作清单（本周期可执行）</h2>
+      <div class="action-list">${renderMarkdown(actSection.content)}</div>`;
+  }
+
   // 一句话决策
   const decision = p.decision || firstSentence(result.reportText) || '分析完成。';
   sec.appendChild(card(`<span class="label">AI 一句话决策</span>${md1(decision)}`, 'decision'));
+
+  // 选品动作清单（独立高亮卡，紧跟决策之后）
+  if (actionListHTML) {
+    sec.appendChild(card(actionListHTML, 'action'));
+  }
 
   // 场景识别
   if (p.scene && (p.scene.markdown || (p.scene.addReduce && p.scene.addReduce.length))) {
@@ -379,9 +396,9 @@ function renderResults(result) {
     sec.appendChild(card(`<h2>🤖 AI Tomorrow · 明日选品建议</h2>${rows}`, ''));
   }
 
-  // 完整报告
-  if (result.reportText) {
-    sec.appendChild(card(`<h2>📄 完整分析报告</h2><div class="report">${renderMarkdown(result.reportText)}</div>`, ''));
+  // 完整报告（已剥离「选品动作清单」章节，避免与上方独立卡重复）
+  if (reportText) {
+    sec.appendChild(card(`<h2>📄 完整分析报告</h2><div class="report">${renderMarkdown(reportText)}</div>`, ''));
   }
 
   // 操作
@@ -499,4 +516,24 @@ function md1(md) {
     return html;
   }
   return esc(src);
+}
+
+// 从完整 Markdown 报告中抽取某个「## 标题」章节，并返回剥离该章节后的剩余文本。
+// 用于把「选品动作清单」单独抽成高亮卡片，同时从完整报告里去掉避免重复。
+function extractSection(md, heading) {
+  if (!md) return { content: '', rest: '' };
+  const lines = String(md).split('\n');
+  let start = -1;
+  for (let i = 0; i < lines.length; i++) {
+    const t = lines[i].trim();
+    if (/^##\s+/.test(t) && t.includes(heading)) { start = i; break; }
+  }
+  if (start < 0) return { content: '', rest: md };
+  let end = lines.length;
+  for (let i = start + 1; i < lines.length; i++) {
+    if (/^##\s+/.test(lines[i].trim())) { end = i; break; }
+  }
+  const content = lines.slice(start + 1, end).join('\n').trim();
+  const rest = (lines.slice(0, start).join('\n') + '\n' + lines.slice(end).join('\n')).trim();
+  return { content, rest };
 }

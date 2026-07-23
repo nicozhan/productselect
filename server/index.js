@@ -5,7 +5,7 @@ import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { runAnalysis } from './infini.js';
+import { runAnalysis, buildModelApiConfig } from './infini.js';
 import { buildPrompt } from './prompts.js';
 import { mockAnalysis } from './mock.js';
 import { extractStructured, extractDecision } from './parse.js';
@@ -87,8 +87,12 @@ function handleAnalyze(req, res) {
       try {
         let out;
         if (apiKey) {
+          // 仅对「应用主 key（匿名访客）」强制切换默认模型以降本；
+          // 登录用户用自己的 key/账号，保留其自身模型设置，不强行覆盖。
+          const enforceModel = !userApiKey;
           out = await runAnalysis({
             apiKey, server: INFINI_SERVER, prompt,
+            apiConfiguration: enforceModel ? buildModelApiConfig() : null,
             onProgress: (t) => { job.progress.push(t); if (job.progress.length > 300) job.progress.shift(); },
             onTaskId: (tid) => job.progress.push(`任务已创建：taskId=${tid}`)
           });
@@ -219,8 +223,11 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
   console.log(`AI 选品大脑 已启动: http://localhost:${PORT}`);
   console.log(`  分析接口: ${API_KEY ? '真实 InfiniSynapse' : '演示模式'}`);
+  const mc = buildModelApiConfig();
+  const mname = mc.infinitisynapseModelId || mc.openAiModelId || mc.anthropicModelId || '默认';
+  console.log(`  默认模型: ${JSON.stringify(mc)}（降本：${process.env.INFINI_MODEL_ID || 'deepseek-v4-flash'}）`);
   console.log(`  Partner SSO: ${sso.isEnabled() ? '已启用 (' + sso.getClientId() + ')' : '未配置（匿名访客回落主 key）'}`);
   console.log(`  回调地址: ${sso.callbackUrl()}`);
   // 「已有数据」缓存兜底：缺失的预生成（通常已在部署前完成并提交）
-  ensureRealCache().then(n => console.log(`  已有数据缓存就绪：${n}/${scenarios.length + getRealScenarios().length}`)).catch(() => {});
+  ensureRealCache().then(n => console.log(`  已有数据缓存就绪：${n}/${getRealScenarios().length}`)).catch(() => {});
 });

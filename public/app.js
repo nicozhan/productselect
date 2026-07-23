@@ -1,6 +1,6 @@
 // public/app.js
 const $ = (s) => document.querySelector(s);
-const state = { scenarios: [], realScenarios: [], cat: 'mock', running: false, timer: null };
+const state = { scenarios: [], realScenarios: [], cat: 'real', running: false, timer: null };
 
 document.addEventListener('DOMContentLoaded', init);
 
@@ -24,6 +24,7 @@ async function init() {
   try {
     const data = await fetch('/api/real-scenarios').then(r => r.json());
     state.realScenarios = data.scenarios || [];
+    renderScenarios(); // 已有数据已加载，重新渲染（默认即展示此分类）
   } catch (e) { console.error(e); }
 
   // 分类切换（模拟数据 / 已有数据）
@@ -42,7 +43,19 @@ async function init() {
     document.getElementById('tab-custom').classList.toggle('hidden', t.dataset.tab !== 'custom');
   }));
 
-  $('#customRun').addEventListener('click', () => runAnalyze(readForm()));
+  $('#customRun').addEventListener('click', () => {
+    // 自定义分析需使用访客自己的账号额度：未登录先跳转登录/注册页
+    if (!(state.me && state.me.loggedIn)) {
+      window.location.href = '/auth/infini/login';
+      return;
+    }
+    runAnalyze(readForm());
+  });
+
+  // 城市下拉选「其他」时显示手动输入框
+  $('#f_city').addEventListener('change', (e) => {
+    $('#f_city_other').classList.toggle('hidden', e.target.value !== '__other');
+  });
 
   // 上传数据二维码弹窗：点击遮罩或关闭按钮关闭
   document.querySelectorAll('#qrModal [data-close]').forEach(el =>
@@ -84,6 +97,14 @@ function renderScenarios() {
   grid.innerHTML = '';
   const list = state.cat === 'real' ? state.realScenarios : state.scenarios;
   const isReal = state.cat === 'real';
+  const loggedIn = state.me && state.me.loggedIn;
+
+  // 分类说明随选项变化
+  const hint = $('#catHint');
+  if (hint) hint.textContent = isReal
+    ? '基于真实销售数据预生成的选品结论，约 10 秒加载即可查看，无需登录即可体验。'
+    : '模拟数据由 AI 实时分析生成——需登录你自己的 InfiniSynapse 账号（用你自己的额度），点击卡片即前往登录。';
+
   if (isReal && (!list || !list.length)) {
     grid.innerHTML = '<div class="hint">已有数据场景加载中或暂不可用，请稍后重试或切换到「模拟数据」。</div>';
     return;
@@ -92,26 +113,136 @@ function renderScenarios() {
     const card = document.createElement('div');
     card.className = 'scenario-card' + (isReal ? ' real' : '');
     const badge = isReal ? `<div class="dtype">📁 已有数据</div>` : '';
+    const lockNote = (!isReal && !loggedIn)
+      ? `<div class="lock">🔒 需登录你的账号（用自己的额度实时分析）</div>` : '';
+    const runText = isReal
+      ? '加载固定数据，秒出结果 →'
+      : (loggedIn ? '一键生成选品建议 →' : '登录后开始 AI 分析 →');
     card.innerHTML = `
       ${badge}
       <div class="icon">${s.icon || '📦'}</div>
       <div class="name">${esc(s.name)}</div>
       <div class="tag">${esc(s.tagline || '')}</div>
       <div class="loc">📍 ${esc(s.location || '')}</div>
-      <div class="run">${isReal ? '⚡ 加载固定数据，秒出结果 →' : '⚡ 一键生成选品建议 →'}</div>`;
-    card.addEventListener('click', () => isReal ? runRealAnalysis(s) : runAnalyze(s));
+      ${lockNote}
+      <div class="run">⚡ ${runText}</div>`;
+    card.addEventListener('click', () => {
+      if (isReal) { runRealAnalysis(s); return; }
+      // 模拟数据需使用访客自己的账号：未登录直接跳转登录/注册页
+      if (loggedIn) startScenarioAnalysis(s);
+      else window.location.href = '/auth/infini/login';
+    });
     grid.appendChild(card);
   });
 
-  // 末尾固定追加「上传你的数据」块（+/加号），点击弹出微信二维码
-  const up = document.createElement('div');
-  up.className = 'scenario-card upload-card';
-  up.innerHTML = `
-    <div class="upload-plus">+</div>
-    <div class="name">上传你的数据</div>
-    <div class="tag">用自己的售货柜数据，让 AI 帮你选品</div>`;
-  up.addEventListener('click', openQrModal);
-  grid.appendChild(up);
+  // 「快速体验」两个分类下都提供「预览报告」与「上传你的数据」两个模块
+  {
+    // 预览报告：直接跳转到基于真实数据的年度运营优化建议书网页
+    const rep = document.createElement('div');
+    rep.className = 'scenario-card report-card';
+    rep.innerHTML = `
+      <div class="report-ic">📄</div>
+      <div class="name">预览报告</div>
+      <div class="tag">基于真实数据的 2023 年度自动售货机运营优化建议书</div>
+      <div class="run">📊 打开完整报告 →</div>`;
+    rep.addEventListener('click', () => window.open('/report-2023.html', '_blank'));
+    grid.appendChild(rep);
+
+    // 上传你的数据：说明所需字段 + 提供模板下载 + 点击弹联系二维码
+    const up = document.createElement('div');
+    up.className = 'scenario-card upload-card';
+    up.innerHTML = `
+      <div class="upload-plus">+</div>
+      <div class="name">上传你的数据</div>
+      <div class="tag">连接真实售货柜数据，让 AI 生成专属运营方案</div>
+      <div class="need-title">📋 我们分析需要的数据字段：</div>
+      <ul class="need-list">
+        <li>点位 / 设备名称、设备编号</li>
+        <li>商品名称、商品分类</li>
+        <li>交易日期、支付方式（现金 / 刷卡）</li>
+        <li>销量（件）、单价、金额合计</li>
+        <li>货道 / 库存信息（选填，可提升精度）</li>
+      </ul>
+      <a class="tpl-down" href="/assets/vending-data-template.xlsx" download>⬇ 下载数据模板（Excel）</a>
+      <div class="run">⚡ 联系我们接入你的数据 →</div>`;
+    up.addEventListener('click', openQrModal);
+    const dl = up.querySelector('.tpl-down');
+    if (dl) dl.addEventListener('click', e => e.stopPropagation()); // 下载不触发二维码弹窗
+    grid.appendChild(up);
+  }
+}
+
+// 两层体验的第一层（卡片）→ 第二层（AI 正在分析过程动画）→ 真实分析 → 结果
+async function startScenarioAnalysis(s) {
+  if (state.running) return;
+  state.running = true;
+  const ov = $('#analyzeOverlay');
+  resetSteps();
+  $('#aoTitle').innerHTML = 'AI 正在分析 <b>' + esc(s.name) + '</b>…';
+  $('#aoStep1').textContent = '匹配 ' + (s.deviceCount || 0).toLocaleString() + ' 台' + (s.sceneWord || '场景') + '设备历史数据';
+  $('#aoLog').textContent = '';
+  ov.classList.remove('hidden');
+  window.scrollTo({ top: ov.offsetTop - 30, behavior: 'smooth' });
+
+  stepDone(1);
+  await wait(450);
+  stepDone(2);
+  await wait(450);
+  stepDone(3);
+  stepRunning(4);
+
+  let jobId;
+  try {
+    const r = await fetch('/api/analyze', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ inputs: scenarioInputs(s) })
+    }).then(r => r.json());
+    jobId = r.jobId;
+  } catch (e) {
+    stepErr(4);
+    $('#aoLog').textContent += '\n❌ 提交失败：' + e.message;
+    state.running = false; return;
+  }
+  pollJob(jobId);
+}
+
+function scenarioInputs(s) {
+  return {
+    scenarioName: s.name, location: s.location, city: s.city, deviceId: s.deviceId,
+    weather: s.weather, event: s.event, holiday: s.holiday,
+    demographics: s.demographics, inventoryNotes: s.inventoryNotes,
+    businessHours: s.businessHours, salesData: s.salesData, focus: s.focus
+  };
+}
+
+function wait(ms) { return new Promise(res => setTimeout(res, ms)); }
+function resetSteps() { document.querySelectorAll('#analyzeOverlay .ao-step').forEach(li => li.classList.remove('done', 'running', 'err')); }
+function stepDone(n) { const li = document.querySelector('#analyzeOverlay .ao-step[data-step="' + n + '"]'); if (li) { li.classList.remove('running'); li.classList.add('done'); } }
+function stepRunning(n) { const li = document.querySelector('#analyzeOverlay .ao-step[data-step="' + n + '"]'); if (li) li.classList.add('running'); }
+function stepErr(n) { const li = document.querySelector('#analyzeOverlay .ao-step[data-step="' + n + '"]'); if (li) { li.classList.remove('running'); li.classList.add('err'); } }
+
+function pollJob(jobId) {
+  fetch('/api/job/' + jobId).then(r => r.json()).then(job => {
+    if (job.progress && job.progress.length) {
+      $('#aoLog').textContent = job.progress.join('\n');
+      $('#aoLog').scrollTop = $('#aoLog').scrollHeight;
+    }
+    if (job.status === 'done') {
+      stepDone(4);
+      $('#aoLog').textContent += '\n✅ 方案已生成';
+      setTimeout(() => {
+        $('#analyzeOverlay').classList.add('hidden');
+        renderResults(job.result);
+        state.running = false;
+      }, 800);
+    } else if (job.status === 'error') {
+      stepErr(4);
+      $('#aoLog').textContent += '\n❌ ' + (job.error || '分析失败');
+      state.running = false;
+    } else {
+      setTimeout(() => pollJob(jobId), 1500);
+    }
+  }).catch(() => setTimeout(() => pollJob(jobId), 2000));
 }
 
 function openQrModal() {
@@ -125,9 +256,13 @@ function closeQrModal() {
 
 function readForm() {
   const v = (id) => $(id).value.trim();
+  const citySel = $('#f_city').value;
+  const city = citySel === '__other' ? v('#f_city_other') : citySel;
+  const businessHours = Array.from(document.querySelectorAll('.bh:checked')).map(c => c.value);
   return {
     deviceId: v('#f_deviceId'), scenarioName: v('#f_scenarioName'),
-    location: v('#f_location'), city: v('#f_city'),
+    location: v('#f_location'), city,
+    businessHours,
     // 天气与人群画像不再由用户填写，交由 AI 分析（见 prompts.js）
     event: v('#f_event'), holiday: $('#f_holiday').checked,
     inventoryNotes: v('#f_inventoryNotes'), salesData: v('#f_salesData')

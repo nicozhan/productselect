@@ -3,7 +3,7 @@
 export function buildPrompt(inputs = {}) {
   const {
     scenarioName, location, city, deviceId, weather = {}, event, holiday,
-    demographics = {}, salesData, inventoryNotes, tomorrow
+    demographics = {}, salesData, inventoryNotes, tomorrow, businessHours, focus
   } = inputs;
 
   const w = weather || {};
@@ -46,7 +46,9 @@ export function buildPrompt(inputs = {}) {
 - 附近活动：${event || '无'}
 - 是否节假日：${holiday ? '是' : '否'}
 - 用户画像：${demoLine}
+- 营业时段：${businessHours && businessHours.length ? businessHours.join('、') : '（用户未指定，请按场景类型推断典型高峰时段）'}
 - 库存 / 保质期备注：${inventoryNotes || '无'}
+- 分析重点（该场景运营方最关心的维度）：${(focus && focus.length) ? focus.join('；') : '（无特别要求）'}
 
 # 历史销售数据
 ${salesBlock}
@@ -55,7 +57,7 @@ ${tomorrowBlock}
 
 # 分析要求（请尽量覆盖以下 12 个维度）
 1. 历史销售（销量 / GMV / 利润率 / 售罄率）
-2. 时间维度（小时 / 星期 / 月份）
+2. 时间维度（小时 / 星期 / 月份 / 营业高峰时段）
 3. 天气维度（温度 / 降雨 / 湿度）——**由你（AI）联网查询或推断**，用户通常不掌握这些环境数据
 4. 地理位置（POI：写字楼 / 学校 / 医院 / 地铁 / 商场 / 酒吧等）
 5. 周边活动（演唱会 / 赛事 / 展会）
@@ -66,6 +68,8 @@ ${tomorrowBlock}
 10. 竞争环境（周边便利店价格）
 11. 社交热点（爆款商品趋势）
 12. AI 销量预测（未来 1-7 天）
+
+请特别针对上述「分析重点」逐条展开，给出可执行的针对性建议，而不是泛泛而谈。
 
 所有数据已在上方提供，请直接分析，**不要请求上传文件**。请像一个资深零售运营总监一样，给出可执行的决策，而不是堆砌报表。
 

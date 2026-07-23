@@ -1,21 +1,27 @@
 // server/scenarios.js
 // 预设无人零售场景：评委/用户点开即体验，无需自己准备数据。
 // 每个场景自带样例销售 CSV 与环境输入，结构与应用表单输入一致。
+// focus = 该场景运营方最关心的分析重点（用于两层设计的第二层与 prompt 指导）
+// deviceCount / sceneWord = 用于「AI 正在分析」过程动画的真实感展示
 
 export const scenarios = [
   {
     id: 'office',
-    name: '国贸写字楼大堂柜',
+    name: '国贸 CBD 智能零售柜',
     icon: '🏢',
-    tagline: 'CBD 上班族的早八续命站',
+    tagline: '基于白领消费数据的办公场景选品优化',
     deviceId: 'VM-CMD-001',
     location: '北京国贸三期写字楼大堂',
     city: '北京',
+    sceneWord: '办公',
+    deviceCount: 2341,
     weather: { temp: 28, rain: 0, humidity: 45 },
     event: '无',
     holiday: false,
     demographics: { genderRatio: '女性 58%', ageRange: '25-40 岁' },
     inventoryNotes: '三明治/酸奶当日库存有限，临期需优先清。',
+    businessHours: ['早高峰(7-9点)', '午间(11-13点)', '晚高峰(17-19点)'],
+    focus: ['早高峰 / 午间消费规律', '白领消费偏好', '咖啡、饮料、轻食组合', '同类办公楼设备销售数据'],
     salesData: `商品,昨日销量,周销量,单价,单位利润,库存,保质期天数
 美式咖啡,62,430,12,5.5,30,2
 拿铁,48,330,15,6,25,2
@@ -28,17 +34,21 @@ export const scenarios = [
   },
   {
     id: 'campus',
-    name: '浙江大学紫金港校区',
+    name: '浙江大学校园零售柜',
     icon: '🎓',
-    tagline: '求是园里的深夜补给站',
+    tagline: '基于校园消费趋势的年轻用户选品优化',
     deviceId: 'VM-EDU-007',
-    location: '浙江大学紫金港校区宿舍区及周边',
+    location: '浙江大学紫金港校区宿舍区及教学区',
     city: '杭州',
+    sceneWord: '校园',
+    deviceCount: 1876,
     weather: { temp: 26, rain: 0, humidity: 60 },
     event: '无',
     holiday: false,
     demographics: { genderRatio: '男女各半', ageRange: '18-24 岁' },
     inventoryNotes: '期末/假期客流波动大，泡面与零食周转快，注意临期清货。',
+    businessHours: ['午间(11-13点)', '晚高峰(17-19点)', '夜间(20-24点)'],
+    focus: ['学生消费周期', '夜间消费需求', '零食饮料偏好', '校园设备历史销售趋势'],
     salesData: `商品,昨日销量,周销量,单价,单位利润,库存,保质期天数
 可乐,55,388,3,0.6,120,180
 薯片,48,330,6,2,80,120
@@ -51,17 +61,21 @@ export const scenarios = [
   },
   {
     id: 'gym',
-    name: '深圳BYD工厂',
+    name: '深圳智能制造园区柜',
     icon: '🏭',
-    tagline: '码农练后补给站',
+    tagline: '基于工业园区员工需求的高频补给优化',
     deviceId: 'VM-GYM-012',
-    location: '深圳BYD工厂',
+    location: '深圳大型制造园区',
     city: '深圳',
+    sceneWord: '工业园',
+    deviceCount: 1240,
     weather: { temp: 29, rain: 0, humidity: 65 },
     event: '无',
     holiday: false,
     demographics: { genderRatio: '男性 70%', ageRange: '22-40 岁' },
     inventoryNotes: '产线轮班节奏固定，午后与夜班能量补给需求集中，饮用水与功能饮料周转快。',
+    businessHours: ['早高峰(7-9点)', '午间(11-13点)', '晚高峰(17-19点)'],
+    focus: ['工作班次影响', '员工消费时间', '高频刚需商品', '工厂园区同类设备数据'],
     salesData: `商品,昨日销量,周销量,单价,单位利润,库存,保质期天数
 矿泉水,70,490,2,0.5,250,365
 功能饮料,46,320,6,2,80,365
@@ -76,17 +90,21 @@ export const scenarios = [
   },
   {
     id: 'metro',
-    name: '奥林匹克公园(鸟巢站)',
+    name: '鸟巢商圈智能零售柜',
     icon: '🚇',
-    tagline: '观赛游园的 30 秒补给',
+    tagline: '基于大型活动与人流变化的动态选品优化',
     deviceId: 'VM-MET-021',
-    location: '北京奥林匹克公园地铁站（8/15 号线，鸟巢与水立方之间）',
+    location: '北京奥林匹克公园（鸟巢 / 水立方周边）',
     city: '北京',
+    sceneWord: '商圈',
+    deviceCount: 952,
     weather: { temp: 25, rain: 5, humidity: 55 },
     event: '无',
     holiday: false,
     demographics: { genderRatio: '游客与通勤混合', ageRange: '全年龄段' },
-    inventoryNotes: '旅游旺季矿泉水与冷饮需求高，雨季备好湿巾。',
+    inventoryNotes: '旅游旺季与赛事日矿泉水、冷饮、即时食品需求骤增，雨季备好湿巾。',
+    businessHours: ['早高峰(7-9点)', '晚高峰(17-19点)', '夜间(20-24点)'],
+    focus: ['活动日期影响', '人流变化预测', '天气因素', '短时消费需求'],
     salesData: `商品,昨日销量,周销量,单价,单位利润,库存,保质期天数
 矿泉水,70,490,2,0.5,250,365
 咖啡,45,310,12,5,40,2
@@ -99,17 +117,21 @@ export const scenarios = [
   },
   {
     id: 'sanlitun',
-    name: '三里屯 SO·HO 酒吧街柜',
+    name: '三里屯夜生活零售柜',
     icon: '🌃',
-    tagline: '夜经济里的微醺补给',
+    tagline: '基于夜间消费场景的商品组合优化',
     deviceId: 'VM-SLT-033',
-    location: '三里屯 SO·HO 露天广场',
+    location: '北京三里屯 SOHO 露天广场',
     city: '北京',
+    sceneWord: '夜生活',
+    deviceCount: 1458,
     weather: { temp: 32, rain: 0, humidity: 40 },
     event: '周末酒吧聚会高峰',
     holiday: false,
     demographics: { genderRatio: '女性 67%', ageRange: '20-35 岁' },
-    inventoryNotes: '无糖/低卡品类动销快，注意及时补。',
+    inventoryNotes: '无糖/低卡品类与佐酒小食动销快，注意及时补。',
+    businessHours: ['午间(11-13点)', '晚高峰(17-19点)', '夜间(20-24点)'],
+    focus: ['夜间消费习惯', '年轻用户偏好', '饮品与零食关联销售', '周末消费趋势'],
     salesData: `商品,昨日销量,周销量,单价,单位利润,库存,保质期天数
 苏打水,58,400,6,2.5,90,365
 无糖饮料,52,360,7,3,80,365
@@ -119,6 +141,60 @@ export const scenarios = [
 薯片,40,280,6,2,70,120
 矿泉水,50,340,2,0.5,200,365
 气泡水,36,250,8,3,55,365`
+  },
+  {
+    id: 'scenic',
+    name: '景区智能零售柜',
+    icon: '🏖️',
+    tagline: '基于旅游场景的即时消费需求分析',
+    deviceId: 'VM-SCE-041',
+    location: '北京环球度假区 / 杭州西湖景区',
+    city: '北京',
+    sceneWord: '景区',
+    deviceCount: 768,
+    weather: { temp: 27, rain: 10, humidity: 62 },
+    event: '节假日 / 旅游旺季人流高峰',
+    holiday: true,
+    demographics: { genderRatio: '游客为主', ageRange: '全年龄段' },
+    inventoryNotes: '节假日与高温日饮品、防晒、雨具需求集中，备货量需按客流上浮。',
+    businessHours: ['早高峰(7-9点)', '午间(11-13点)', '晚高峰(17-19点)', '夜间(20-24点)'],
+    focus: ['游客消费行为', '天气变化影响', '节假日人流', '高毛利商品组合'],
+    salesData: `商品,昨日销量,周销量,单价,单位利润,库存,保质期天数
+矿泉水,120,840,3,1,300,365
+冰淇淋,85,590,8,3,60,3
+运动饮料,70,490,6,2,120,365
+防晒喷雾,45,310,25,8,40,365
+雨衣,30,210,15,5,30,365
+薯片,60,420,6,2,90,120
+湿巾,55,380,3,1.5,100,365
+特色文创雪糕,40,280,18,7,30,2`
+  },
+  {
+    id: 'hospital',
+    name: '医疗场景智能零售柜',
+    icon: '🏥',
+    tagline: '基于医院环境的便利消费需求分析',
+    deviceId: 'VM-HOS-052',
+    location: '三甲医院门诊大厅',
+    city: '北京',
+    sceneWord: '医疗',
+    deviceCount: 2083,
+    weather: { temp: 24, rain: 0, humidity: 50 },
+    event: '无',
+    holiday: false,
+    demographics: { genderRatio: '患者与陪诊混合', ageRange: '全年龄段' },
+    inventoryNotes: '夜间急诊需求稳定，热饮与易消化食品动销；口罩、湿巾为刚需。',
+    businessHours: ['早高峰(7-9点)', '午间(11-13点)', '晚高峰(17-19点)', '夜间(20-24点)'],
+    focus: ['长停留用户行为', '陪诊人员需求', '健康食品趋势', '医院场景设备数据'],
+    salesData: `商品,昨日销量,周销量,单价,单位利润,库存,保质期天数
+矿泉水,95,665,3,1,260,365
+热豆浆,60,420,6,2,50,1
+八宝粥,55,385,8,3,45,12
+面包,58,406,6,2.5,50,3
+牛奶,48,336,5,1.5,60,7
+口罩,40,280,3,1,120,540
+湿巾,50,350,3,1.5,110,365
+充电线,22,150,20,8,25,365`
   }
 ];
 

@@ -111,6 +111,12 @@ a:hover { text-decoration: underline; }
   padding: 4px 9px; border-radius: 999px; color: #06121f;
   background: linear-gradient(90deg, var(--accent-2), #ffb066);
 }
+/* 模拟数据卡片在未登录时的「需登录」提示 */
+.scenario-card .lock {
+  display: inline-block; margin-top: 8px; font-size: 11px; font-weight: 600;
+  color: #ffd28a; background: rgba(255,170,40,.12);
+  border: 1px solid rgba(255,170,40,.35); border-radius: 999px; padding: 3px 9px;
+}
 
 /* 「上传你的数据」加号卡片 */
 .upload-card {
@@ -127,6 +133,74 @@ a:hover { text-decoration: underline; }
 }
 .upload-card .name { font-size: 16px; }
 .upload-card .tag { color: var(--muted); font-size: 12px; margin-top: 4px; }
+.upload-card .upload-list {
+  margin-top: 10px; font-size: 11.5px; color: var(--muted);
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 10px; line-height: 1.5;
+}
+.upload-card .need-title { margin-top: 12px; font-size: 12px; font-weight: 700; color: var(--text); }
+.upload-card .need-list {
+  margin: 6px 0 0; padding-left: 16px; font-size: 11.5px; color: var(--muted);
+  text-align: left; line-height: 1.6;
+}
+.upload-card .need-list li { list-style: disc; }
+.upload-card .tpl-down {
+  display: inline-block; margin-top: 12px; font-size: 12.5px; font-weight: 700;
+  color: #06121f; text-decoration: none; cursor: pointer;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border-radius: 999px; padding: 7px 14px;
+}
+.upload-card .tpl-down:hover { filter: brightness(1.06); }
+.upload-card .run { color: var(--accent); margin-top: 12px; }
+
+/* 「预览报告」模块卡片 */
+.report-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; border-color: rgba(74,99,255,.45);
+  background: linear-gradient(160deg, var(--card), rgba(74,99,255,.10));
+}
+.report-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+.report-card .report-ic {
+  width: 54px; height: 54px; border-radius: 14px; display: grid; place-items: center;
+  font-size: 30px; margin-bottom: 10px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 6px 18px rgba(74,99,255,.3);
+}
+.report-card .name { font-size: 16px; }
+.report-card .tag { color: var(--muted); font-size: 12px; margin-top: 4px; }
+.report-card .run { color: var(--accent); margin-top: 12px; }
+
+/* 场景点击后的「AI 正在分析」过程动画层 */
+.analyze-overlay {
+  position: fixed; inset: 0; z-index: 90; display: grid; place-items: center;
+  background: rgba(6,18,31,.62); backdrop-filter: blur(3px);
+}
+.ao-card {
+  width: min(440px, 92vw); padding: 26px 26px 20px; border-radius: 18px;
+  background: var(--card); border: 1px solid var(--border);
+  box-shadow: 0 24px 70px rgba(0,0,0,.45); animation: qrPop .18s ease-out;
+}
+.ao-title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 20px; }
+.ao-title b { color: var(--accent-2); }
+.ao-steps { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.ao-step { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--muted); transition: color .2s; }
+.ao-step .ao-ic {
+  width: 22px; height: 22px; border-radius: 50%; flex: 0 0 auto;
+  border: 2px solid var(--border); display: grid; place-items: center;
+  font-size: 12px; color: #fff; transition: .25s;
+}
+.ao-step.done { color: var(--text); }
+.ao-step.done .ao-ic { background: var(--good); border-color: var(--good); }
+.ao-step.done .ao-ic::after { content: '✓'; }
+.ao-step.err .ao-ic { background: var(--bad); border-color: var(--bad); }
+.ao-step.err .ao-ic::after { content: '!'; }
+.ao-step.running .ao-ic { border-color: var(--accent); border-top-color: transparent; animation: spin .8s linear infinite; }
+.ao-final { font-weight: 600; }
+.ao-log {
+  max-height: 150px; overflow: auto; margin: 4px 0 0; padding: 12px 14px;
+  background: var(--bg-soft); border: 1px solid var(--border); border-radius: 10px;
+  font-size: 12px; line-height: 1.6; color: var(--muted); white-space: pre-wrap;
+}
 
 /* 上传数据二维码弹窗 */
 .qr-modal { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; }
@@ -156,14 +230,17 @@ a:hover { text-decoration: underline; }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .form-grid label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); }
 .form-grid .span2 { grid-column: 1 / -1; }
-.form-grid input, .form-grid textarea {
+.form-grid input, .form-grid textarea, .form-grid select {
   background: var(--bg-soft); border: 1px solid var(--border); color: var(--text);
   border-radius: 10px; padding: 10px 12px; font-size: 14px; font-family: inherit;
 }
-.form-grid input:focus, .form-grid textarea:focus { outline: none; border-color: var(--accent); }
+.form-grid input:focus, .form-grid textarea:focus, .form-grid select:focus { outline: none; border-color: var(--accent); }
 .form-grid textarea { resize: vertical; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12.5px; }
 .checkbox { flex-direction: row; align-items: center; gap: 8px; }
 .checkbox input { width: auto; }
+.checks { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 2px; }
+.checks .mini { flex-direction: row; align-items: center; gap: 6px; font-size: 13px; color: var(--text); }
+.checks .mini input { width: auto; }
 #customRun { margin-top: 18px; }
 
 /* Progress */

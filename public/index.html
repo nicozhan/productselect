@@ -50,10 +50,10 @@
 
     <!-- 快速体验 -->
     <div id="tab-quick" class="tab-panel">
-      <p class="hint">挑一个预设场景，一键生成完整选品建议（评委/用户无需自备数据即可体验）。</p>
+      <p class="hint" id="catHint">基于真实销售数据预生成的选品结论，约 10 秒加载即可查看，无需登录即可体验。</p>
       <div class="seg">
-        <button class="seg-btn active" data-cat="mock">🎲 模拟数据</button>
-        <button class="seg-btn" data-cat="real">📁 已有数据</button>
+        <button class="seg-btn active" data-cat="real">📁 已有数据</button>
+        <button class="seg-btn" data-cat="mock">🎲 模拟数据 · 需登录</button>
       </div>
       <div id="scenarioGrid" class="scenario-grid"></div>
     </div>
@@ -64,7 +64,7 @@
       <div class="qr-card">
         <button class="qr-close" data-close="1" aria-label="关闭">×</button>
         <div class="qr-title">上传你的数据</div>
-        <div class="qr-sub">扫码联系我们，让 AI 接入你的无人零售运营</div>
+        <div class="qr-sub">上传销售记录 / 商品信息 / 库存数据 / 设备位置，让 AI 接入你的柜组</div>
         <img class="qr-img" src="/assets/wechat-qr.svg" alt="微信二维码" />
         <div class="qr-text">请联系我们 <b>京品高科</b>，让 AI 赋能您的无人零售运营</div>
       </div>
@@ -76,13 +76,41 @@
       <div class="form-grid">
         <label>场景名称<input id="f_scenarioName" placeholder="如：写字楼大堂柜" /></label>
         <label>所在位置<input id="f_location" placeholder="如：北京国贸写字楼大堂" /></label>
-        <label>城市<input id="f_city" placeholder="如：北京（帮助 AI 分析当地气候与人群）" /></label>
+        <label>城市
+          <select id="f_city">
+            <option value="北京">北京</option>
+            <option value="上海">上海</option>
+            <option value="广州">广州</option>
+            <option value="深圳">深圳</option>
+            <option value="杭州">杭州</option>
+            <option value="成都">成都</option>
+            <option value="武汉">武汉</option>
+            <option value="南京">南京</option>
+            <option value="西安">西安</option>
+            <option value="重庆">重庆</option>
+            <option value="天津">天津</option>
+            <option value="苏州">苏州</option>
+            <option value="厦门">厦门</option>
+            <option value="长沙">长沙</option>
+            <option value="青岛">青岛</option>
+            <option value="__other">其他（手动输入）</option>
+          </select>
+        </label>
+        <input id="f_city_other" class="hidden" placeholder="请输入城市名" />
         <label>设备ID<input id="f_deviceId" placeholder="VM-001（可选）" /></label>
         <label class="span2">附近大型活动（可选）
           <input id="f_event" placeholder="如：周杰伦演唱会 / 学校运动会（只有你知道才填）" />
         </label>
         <label class="span2 checkbox">
           <input id="f_holiday" type="checkbox" /> 是否节假日 / 促销日
+        </label>
+        <label class="span2">营业时段（可多选，直接影响选品与补货节奏）
+          <div class="checks">
+            <label class="mini"><input type="checkbox" class="bh" value="早高峰(7-9点)" /> 早高峰</label>
+            <label class="mini"><input type="checkbox" class="bh" value="午间(11-13点)" /> 午间</label>
+            <label class="mini"><input type="checkbox" class="bh" value="晚高峰(17-19点)" /> 晚高峰</label>
+            <label class="mini"><input type="checkbox" class="bh" value="夜间(20-24点)" /> 夜间</label>
+          </div>
         </label>
         <label class="span2">库存与保质期备注（可选）
           <input id="f_inventoryNotes" placeholder="如：三明治临期需优先清、矿泉水库存偏低" />
@@ -104,6 +132,20 @@
     <div class="progress-bar"><i id="progressBar"></i></div>
     <pre id="progressLog" class="progress-log"></pre>
   </section>
+
+  <!-- 场景点击后的「AI 正在分析」过程动画层 -->
+  <div id="analyzeOverlay" class="analyze-overlay hidden">
+    <div class="ao-card">
+      <div class="ao-title" id="aoTitle">AI 正在分析…</div>
+      <ul class="ao-steps">
+        <li class="ao-step" data-step="1"><span class="ao-ic"></span><span class="ao-txt" id="aoStep1">匹配设备历史数据</span></li>
+        <li class="ao-step" data-step="2"><span class="ao-ic"></span><span class="ao-txt">分析近 30 天销售趋势</span></li>
+        <li class="ao-step" data-step="3"><span class="ao-ic"></span><span class="ao-txt">结合天气、人流、POI 动态</span></li>
+        <li class="ao-step ao-final" data-step="4"><span class="ao-ic"></span><span class="ao-txt">生成明日商品优化方案</span></li>
+      </ul>
+      <pre class="ao-log" id="aoLog"></pre>
+    </div>
+  </div>
 
   <!-- 结果 -->
   <section id="resultSection" class="result-section hidden"></section>

@@ -9,6 +9,48 @@ const MAX_DURATION_MS = 300000; // 长任务上限 5 分钟
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+/**
+ * 根据环境变量构建「分析模型」的 apiConfiguration。
+ * 默认使用 infinisynapse 托管的 deepseek-v4-flash（成本远低于默认大模型）。
+ * 若想自带 DeepSeek key（最便宜），设 INFINI_MODEL_PROVIDER=openai 并填 INFINI_MODEL_API_KEY。
+ * 文档：模型只能在 POST /api/ai/settings 中设置（newTask 无法指定）。
+ */
+export function buildModelApiConfig() {
+  const provider = (process.env.INFINI_MODEL_PROVIDER || 'infinisynapse').toLowerCase();
+  const modelId = process.env.INFINI_MODEL_ID || 'deepseek-v4-flash';
+  if (provider === 'openai') {
+    return {
+      apiProvider: 'openai',
+      openAiBaseUrl: process.env.INFINI_MODEL_BASE_URL || 'https://api.deepseek.com/v1',
+      openAiApiKey: process.env.INFINI_MODEL_API_KEY || '',
+      openAiModelId: modelId
+    };
+  }
+  if (provider === 'anthropic') {
+    return { apiProvider: 'anthropic', anthropicModelId: modelId };
+  }
+  return { apiProvider: 'infinisynapse', infinisynapseModelId: modelId };
+}
+
+// 把当前模型配置写入账号默认（POST /api/ai/settings）。返回提示文案或 null。
+async function applyModelConfig(server, auth, apiConfiguration) {
+  try {
+    const r = await fetch(`${server}/api/ai/settings`, {
+      method: 'POST',
+      headers: { ...auth, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ apiConfiguration })
+    });
+    if (!r.ok) return '⚠️ 模型切换设置失败（' + r.status + '），沿用账号默认';
+    const name = apiConfiguration.infinitisynapseModelId
+      || apiConfiguration.openAiModelId
+      || apiConfiguration.anthropicModelId
+      || JSON.stringify(apiConfiguration);
+    return '⚙️ 已切换分析模型：' + name;
+  } catch (e) {
+    return '⚠️ 模型切换设置异常，沿用账号默认';
+  }
+}
+
 // 解析单个 SSE 块（两个换行分隔）
 function parseSSEBlock(block) {
   let event = null;
@@ -33,7 +75,7 @@ function extractToolBrief(text) {
  * 发起一次 InfiniSynapse 分析任务并等待完成，返回结构化结果。
  * @returns {Promise<{taskId:string|null, reportText:string, workspaceFiles:Array, sayText:string}>}
  */
-export async function runAnalysis({ apiKey, server = DEFAULT_SERVER, prompt, onProgress, onTaskId, timeoutMs = MAX_DURATION_MS }) {
+export async function runAnalysis({ apiKey, server = DEFAULT_SERVER, prompt, onProgress, onTaskId, apiConfiguration = null, timeoutMs = MAX_DURATION_MS }) {
   const connId = crypto.randomUUID();
   const auth = { Authorization: `Bearer ${apiKey}` };
   let taskId = null;
@@ -102,7 +144,11 @@ export async function runAnalysis({ apiKey, server = DEFAULT_SERVER, prompt, onP
     finish(); // SSE 关闭即视为任务结束
   })();
 
-  // 2) 再发 newTask
+  // 2) 再发 newTask（如有指定模型，先在账号默认里切换，确保本次任务用该模型）
+  if (apiConfiguration) {
+    const tip = await applyModelConfig(server, auth, apiConfiguration);
+    if (tip) onProgress && onProgress(tip);
+  }
   onProgress && onProgress('🧠 已提交分析任务，Agent 启动中…');
   const hb = setInterval(() => { onProgress && onProgress('⏳ Agent 正在执行多步分析（联网检索 / 数据计算 / 报告生成）…'); }, 18000);
   const msgResp = await fetch(`${server}/api/ai/message`, {

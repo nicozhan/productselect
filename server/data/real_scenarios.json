@@ -1,0 +1,119 @@
+{
+  "scenarios": [
+    {
+      "id": "guttenplans-nj",
+      "dataType": "real",
+      "icon": "🏪",
+      "name": "GuttenPlans 美国新泽西",
+      "tagline": "社区便利柜的精准补给",
+      "deviceId": "VM-NJ-GP01",
+      "location": "美国新泽西州 GuttenPlans 社区商业区",
+      "city": "美国新泽西",
+      "weather": { "temp": 24, "rain": 0, "humidity": 55 },
+      "event": "无",
+      "holiday": false,
+      "demographics": { "genderRatio": "男女各半", "ageRange": "25-55 岁" },
+      "inventoryNotes": "冷饮与功能饮料周转快，临期零食需优先清。",
+      "salesData": "商品,昨日销量,周销量,单价,单位利润,库存,保质期天数\nCoca Cola - Zero Sugar,3,21,1.49,0.5,28,180\nMonster Energy Original,2,15,3.01,1.1,22,180\nPoland Springs Water,4,28,1.54,0.5,40,365\nKitKat - Crisp Wafers,2,14,2.16,0.8,18,120\nRed Bull - Original,2,13,3.4,1.2,16,180\nSunChips Multigrain - Harvest Cheddar,1,9,1.5,0.5,15,120\nCheezIt - Original,2,11,1.56,0.5,14,120\nWonderful Pistachios - Variety,1,8,2.0,0.7,12,120\nGoldfish Baked - Cheddar,3,19,1.31,0.5,20,120\nOreo Mini,2,12,1.66,0.6,14,120\nSnapple Tea - Raspberry,1,7,2.52,0.9,10,180\nCheetos - Fleming Hot Crunchy,1,6,1.61,0.6,10,120",
+      "meta": {
+        "source": "vending_machine_sales.csv",
+        "transactions": 9617,
+        "productsUsed": 12,
+        "year": "2022",
+        "sampleProducts": ["Coca Cola - Zero Sugar", "Monster Energy Original", "Poland Springs Water", "KitKat - Crisp Wafers", "Red Bull - Original", "Goldfish Baked - Cheddar"]
+      }
+    },
+    {
+      "id": "eb-library-nj",
+      "dataType": "real",
+      "icon": "📚",
+      "name": "EB Public Library 美国新泽西",
+      "tagline": "读者与学生的静默补给站",
+      "deviceId": "VM-NJ-EB02",
+      "location": "美国新泽西州 EB Public Library 大堂",
+      "city": "美国新泽西",
+      "weather": { "temp": 23, "rain": 10, "humidity": 60 },
+      "event": "无",
+      "holiday": false,
+      "demographics": { "genderRatio": "女性 55%", "ageRange": "10-30 岁" },
+      "inventoryNotes": "自习高峰零食动销快，注意低糖与无糖品类。",
+      "salesData": "商品,昨日销量,周销量,单价,单位利润,库存,保质期天数\nCoca Cola - Zero Sugar,2,16,1.49,0.5,24,180\nSunkist Soda - Orange,2,13,1.32,0.5,18,180\nPoland Springs Water,3,22,1.54,0.5,36,365\nKitKat - Crisp Wafers,3,20,2.16,0.8,22,120\nRed Bull - Original,1,8,3.4,1.2,12,180\nSunChips Multigrain - Harvest Cheddar,2,13,1.5,0.5,16,120\nCheezIt - Original,2,12,1.56,0.5,14,120\nWonderful Pistachios - Variety,1,7,2.0,0.7,10,120\nGoldfish Baked - Cheddar,2,15,1.31,0.5,18,120\nOreo Mini,2,14,1.66,0.6,16,120\nSnapple Tea - Raspberry,1,9,2.52,0.9,12,180\nCheetos - Fleming Hot Crunchy,1,7,1.61,0.6,10,120",
+      "meta": {
+        "source": "vending_machine_sales.csv",
+        "transactions": 9617,
+        "productsUsed": 12,
+        "year": "2022",
+        "sampleProducts": ["Coca Cola - Zero Sugar", "Sunkist Soda - Orange", "Poland Springs Water", "KitKat - Crisp Wafers", "Red Bull - Original", "Goldfish Baked - Cheddar"]
+      }
+    },
+    {
+      "id": "earle-asphalt-nj",
+      "dataType": "real",
+      "icon": "🚧",
+      "name": "Earle Asphalt 美国新泽西",
+      "tagline": "户外作业的能量补给柜",
+      "deviceId": "VM-NJ-EA03",
+      "location": "美国新泽西州 Earle Asphalt 工程营地",
+      "city": "美国新泽西",
+      "weather": { "temp": 30, "rain": 0, "humidity": 50 },
+      "event": "无",
+      "holiday": false,
+      "demographics": { "genderRatio": "男性 85%", "ageRange": "25-50 岁" },
+      "inventoryNotes": "高温下饮用水与电解质需求高，需每日补货。",
+      "salesData": "商品,昨日销量,周销量,单价,单位利润,库存,保质期天数\nMonster Energy Original,4,28,3.01,1.1,30,180\nPoland Springs Water,6,42,1.54,0.5,50,365\nRed Bull - Original,3,21,3.4,1.2,22,180\nWonderful Pistachios - Variety,2,14,2.0,0.7,16,120\nSnapple Tea - Raspberry,2,13,2.52,0.9,14,180\nStarbucks Doubleshot Energy - Mocha,2,12,3.54,1.2,12,180\nStarbucks Refresher - Real Coconut Water,1,8,3.04,1.1,10,180\nBai Antioxidant - Tanzania Lemon Super Tea,1,6,2.75,1.0,10,180\nVitamin Water - Squeezed Lemonade,2,13,2.71,0.9,12,365\nRed Bull - Energy Drink - Sugar Free,2,14,3.5,1.2,14,180\nCoca Cola - Zero Sugar,3,20,1.49,0.5,26,180\nGoldfish Baked - Cheddar,2,13,1.31,0.5,16,120",
+      "meta": {
+        "source": "vending_machine_sales.csv",
+        "transactions": 9617,
+        "productsUsed": 12,
+        "year": "2022",
+        "sampleProducts": ["Monster Energy Original", "Poland Springs Water", "Red Bull - Original", "Wonderful Pistachios - Variety", "Snapple Tea - Raspberry", "Starbucks Doubleshot Energy - Mocha"]
+      }
+    },
+    {
+      "id": "bsq-mall-no1-nj",
+      "dataType": "real",
+      "icon": "🛍️",
+      "name": "BSQ Mall NO1 美国新泽西",
+      "tagline": "购物中心入口的引流柜",
+      "deviceId": "VM-NJ-BS1",
+      "location": "美国新泽西州 BSQ Mall 一层主入口",
+      "city": "美国新泽西",
+      "weather": { "temp": 26, "rain": 0, "humidity": 58 },
+      "event": "周末促销",
+      "holiday": false,
+      "demographics": { "genderRatio": "女性 62%", "ageRange": "18-40 岁" },
+      "inventoryNotes": "周末客流大，气泡水与无糖品类动销快。",
+      "salesData": "商品,昨日销量,周销量,单价,单位利润,库存,保质期天数\nCoca Cola - Zero Sugar,4,28,1.49,0.5,30,180\nMonster Energy Original,2,15,3.01,1.1,20,180\nPoland Springs Water,3,22,1.54,0.5,38,365\nSunkist Soda - Orange,2,15,1.32,0.5,18,180\nKitKat - Crisp Wafers,2,16,2.16,0.8,20,120\nRed Bull - Original,2,14,3.4,1.2,16,180\nSunChips Multigrain - Harvest Cheddar,2,14,1.5,0.5,16,120\nCheezIt - Original,2,13,1.56,0.5,14,120\nGoldfish Baked - Cheddar,3,21,1.31,0.5,22,120\nOreo Mini,2,15,1.66,0.6,16,120\nSnapple Tea - Raspberry,2,14,2.52,0.9,14,180\nCheetos - Fleming Hot Crunchy,1,9,1.61,0.6,12,120",
+      "meta": {
+        "source": "vending_machine_sales.csv",
+        "transactions": 9617,
+        "productsUsed": 12,
+        "year": "2022",
+        "sampleProducts": ["Coca Cola - Zero Sugar", "Monster Energy Original", "Poland Springs Water", "Sunkist Soda - Orange", "KitKat - Crisp Wafers", "Red Bull - Original"]
+      }
+    },
+    {
+      "id": "bsq-mall-no2-nj",
+      "dataType": "real",
+      "icon": "🛍️",
+      "name": "BSQ Mall NO2 美国新泽西",
+      "tagline": "影院层的夜间补给柜",
+      "deviceId": "VM-NJ-BS2",
+      "location": "美国新泽西州 BSQ Mall 影院层走廊",
+      "city": "美国新泽西",
+      "weather": { "temp": 25, "rain": 0, "humidity": 55 },
+      "event": "晚间电影场",
+      "holiday": false,
+      "demographics": { "genderRatio": "男女各半", "ageRange": "15-35 岁" },
+      "inventoryNotes": "晚间电影场零食饮料需求集中，爆米花替代品类可加。",
+      "salesData": "商品,昨日销量,周销量,单价,单位利润,库存,保质期天数\nCoca Cola - Zero Sugar,3,22,1.49,0.5,26,180\nMonster Energy Original,2,14,3.01,1.1,18,180\nPoland Springs Water,3,21,1.54,0.5,34,365\nSunkist Soda - Orange,2,14,1.32,0.5,16,180\nKitKat - Crisp Wafers,3,19,2.16,0.8,20,120\nRed Bull - Original,1,9,3.4,1.2,12,180\nSunChips Multigrain - Harvest Cheddar,2,15,1.5,0.5,16,120\nCheezIt - Original,2,14,1.56,0.5,14,120\nGoldfish Baked - Cheddar,2,16,1.31,0.5,18,120\nOreo Mini,3,20,1.66,0.6,18,120\nSnapple Tea - Raspberry,1,8,2.52,0.9,10,180\nCheetos - Fleming Hot Crunchy,2,13,1.61,0.6,12,120",
+      "meta": {
+        "source": "vending_machine_sales.csv",
+        "transactions": 9617,
+        "productsUsed": 12,
+        "year": "2022",
+        "sampleProducts": ["Coca Cola - Zero Sugar", "Monster Energy Original", "Poland Springs Water", "Sunkist Soda - Orange", "KitKat - Crisp Wafers", "Goldfish Baked - Cheddar"]
+      }
+    }
+  ]
+}
